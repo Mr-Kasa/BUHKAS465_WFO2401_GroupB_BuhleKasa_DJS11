@@ -1,0 +1,65 @@
+:root {
+    --light-color: #292728; 
+    --dark-color: #d6d2d4; 
+    --backgroundLightColor: #e3f593;
+    --backgroundDarkColor:#304059;
+
+}
+
+.light {
+    color: var(--light-color);
+    .Header{
+        background-color: var(--backgroundLightColor);
+    } 
+    select {
+        background-color: #a7b8d4;
+    }
+}
+
+.dark {
+    color: var(--dark-color); 
+    .Header{
+        background-color: var(--backgroundDarkColor);
+    }
+    select {
+        background-color: #dce2eb;
+    }  
+
+}
+
+.Header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.theme-dropdown {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+select {
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+@media (min-width: 720px){
+    .Header {
+        flex-direction: row;
+        font-size: xx-large;
+    }
+    button{
+        min-width: 150%;
+    }
+}
+
