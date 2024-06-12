@@ -3,12 +3,12 @@ import Mp3 from '../../HiiiPower.mp3';
 import './Player.css';
 
 const Player: React.FC = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [volume, setVolume] = useState(1); 
-  const [playbackRate, setPlaybackRate] = useState(1); 
-  const [showSettings, setShowSettings] = useState(false); 
-  const audioRef = useRef<HTMLAudioElement>(new Audio(Mp3)); 
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [volume, setVolume] = useState<number>(1);
+  const [playbackRate, setPlaybackRate] = useState<number>(1);
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+  const audioRef = useRef<HTMLAudioElement>(new Audio(Mp3));
 
   useEffect(() => {
     const storedTime = localStorage.getItem('playbackPosition');
@@ -80,59 +80,59 @@ const Player: React.FC = () => {
 
   const toggleSettings = () => {
     setShowSettings(!showSettings);
+
   };
 
   return (
-<div className='Container'>
-    <div className="audio-player">
-      <audio ref={audioRef} src={Mp3} onTimeUpdate={handleTimeUpdate} />
-      <div className="controls">
-        <button className="play-pause-btn" onClick={handlePlayPause}>
-          {isPlaying ? '⏸️' : '▶️'}
-        </button>
-        <input
-          className="progress-bar"
-          type="range"
-          min="0"
-          max="100"
-          value={(currentTime / audioRef.current.duration) * 100 || 0}
-          onChange={handleProgressChange}
-        />
-        <span className="time-display">
-          {Math.floor(currentTime / 60)}:{Math.floor(currentTime % 60).toString().padStart(2, '0')}
-        </span>
-      
-        <button className="settings-btn" onClick={toggleSettings}>
-          {showSettings ? '🔧' : '⚙️'}
-        </button>
+    <div className='footer-container'>
+      <div className="audio-player">
+        <audio ref={audioRef} src={Mp3} onTimeUpdate={handleTimeUpdate} />
+        <div className="controls">
+          <button className="play-pause-btn" onClick={handlePlayPause}>
+            {isPlaying ? '⏸️' : '▶️'}
+          </button>
+          <input
+            className="progress-bar"
+            type="range"
+            min="0"
+            max="100"
+            value={(currentTime / audioRef.current.duration) * 100 || 0}
+            onChange={handleProgressChange}
+          />
+          <span className="time-display">
+            {Math.floor(currentTime / 60)}:{Math.floor(currentTime % 60).toString().padStart(2, '0')}
+          </span>
+        </div>
+          <button className="settings-btn" onClick={toggleSettings}>
+            {showSettings ? '🔧' : '⚙️'}
+          </button>
+
         
-      </div>
-      {showSettings && (
-        <div className='AudioSettingsDiv'>
-          <div className="volume-control">
-            <input
-              className="volume-slider"
-              type="range"
-              min="0"
-              max="100"
-              value={volume * 100}
-              onChange={handleVolumeChange}
-            />
-            <span className="volume-display">Volume: {Math.round(volume * 100)}</span>
-          </div>
-          <div className="playback-speed-control">
-            <span className="speed-display">Playback Speed: {playbackRate.toFixed(1)}x</span>
-            <div className='PlaybackButtons'>
-              <button className="speed-btn" onClick={decrementPlaybackRate}>-</button>
-              <button className="speed-btn" onClick={incrementPlaybackRate}>+</button>
+        {showSettings && (
+          <div className='AudioSettingsDiv'>
+            <div className="volume-control">
+              <input
+                className="volume-slider"
+                type="range"
+                min="0"
+                max="100"
+                value={volume * 100}
+                onChange={handleVolumeChange}
+              />
+              <span className="volume-display">Volume: {Math.round(volume * 100)}</span>
+            </div>
+            <div className="playback-speed-control">
+              <span className="speed-display">Playback Speed: {playbackRate.toFixed(1)}x</span>
+              <div className='PlaybackButtons'>
+                <button className="speed-btn" onClick={decrementPlaybackRate}>⤵️</button>
+                <button className="speed-btn" onClick={incrementPlaybackRate}>⤴️</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
-</div>
   );
 };
 
 export default Player;
-

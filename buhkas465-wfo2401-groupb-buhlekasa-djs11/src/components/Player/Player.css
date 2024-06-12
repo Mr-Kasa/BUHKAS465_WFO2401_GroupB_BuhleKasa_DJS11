@@ -1,34 +1,35 @@
-.Container{
-
-}
-
-.audio-player {
+.footer-container{
+    z-index: 10;
+    position: fixed;
+    bottom: 0;
     width: 100%;
+    box-shadow: 1px -11px 5px 3px rgba(213, 226, 217, 0.54);
+    -webkit-box-shadow: 1px -11px 5px 3px rgba(194, 216, 201, 0.54);
+    -moz-box-shadow: 1px -11px 5px 3px rgba(200, 221, 207, 0.54);
+  }
+  
+  .audio-player {
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
     align-items: center;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(104, 100, 100, 0.1);
+
   }
   
   .controls {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 10px;
   }
   
   .play-pause-btn {
     color: #fff;
     font-weight: 600;
     border: none;
-    padding: 5px ;
     border-radius: 5px;
     cursor: pointer;
-    margin-right: 1em;
     font-size: larger;
-    
+    background-color: transparent;
   }
   
   .play-pause-btn:hover {
@@ -36,8 +37,7 @@
   }
   
   .progress-bar {
-    
-    margin-right: 10px;
+    margin: 0px 20px;
   }
   
   .time-display {
@@ -48,7 +48,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 1em;
   }
   
   .volume-slider {
@@ -59,10 +59,12 @@
   .volume-display {
     font-size: 16px;
   }
-  .PlaybackButtons{
-        display: flex;
-        margin: 2px;
-        justify-content: center;
+  
+  .PlaybackButtons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
   
   .playback-speed-control {
@@ -74,21 +76,18 @@
   }
   
   .speed-btn {
-    background-color: #28a745;
+    background-color: transparent;
     color: #fff;
-    border: none;
+    border: 5px black;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-    margin-right: 5px;
-  }
-  
-  .speed-btn:hover {
-    background-color: #218838;
+    margin: 1em;
+    font-size: x-large;
   }
   
   .speed-display {
-    font-size: 16px;
+    font-size: large;
   }
   
   .light .audio-player {
@@ -96,7 +95,7 @@
   }
   
   .light .play-pause-btn {
-    background-color: #007bff;
+    background-color: transparent;
   }
   
   .dark .audio-player {
@@ -106,23 +105,22 @@
   .dark .play-pause-btn {
     background-color: #0fbcc9;
   }
-  .settings-btn{
-     padding: 5px;
-     background-color: transparent;
-     border: none;
-     cursor: pointer;
-     width:5px;
-     margin-left: 1em;
-     font-size: larger;
-     font-weight: 900;
-    
+  
+  .settings-btn {
+    margin-top: 0;
+    padding: 5px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 5px;
+    font-size: larger;
+    font-weight: 900;
   }
-
-  @media (min-width: 710px) {
-    .audio-player{
-     padding: 1em;
-        
-    }
-
+  
+  button {
+    width: 100%;
+    margin: 1em;
   }
+  
 
+  
