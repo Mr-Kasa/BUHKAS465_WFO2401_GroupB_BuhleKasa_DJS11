@@ -1,0 +1,128 @@
+.Container{
+
+}
+
+.audio-player {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(104, 100, 100, 0.1);
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .play-pause-btn {
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    padding: 5px ;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 1em;
+    font-size: larger;
+    
+  }
+  
+  .play-pause-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .progress-bar {
+    
+    margin-right: 10px;
+  }
+  
+  .time-display {
+    font-size: 16px;
+  }
+  
+  .volume-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .volume-slider {
+    width: 200px;
+    margin-right: 10px;
+  }
+  
+  .volume-display {
+    font-size: 16px;
+  }
+  .PlaybackButtons{
+        display: flex;
+        margin: 2px;
+        justify-content: center;
+  }
+  
+  .playback-speed-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .speed-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  .speed-btn:hover {
+    background-color: #218838;
+  }
+  
+  .speed-display {
+    font-size: 16px;
+  }
+  
+  .light .audio-player {
+    background-color: yellowgreen;
+  }
+  
+  .light .play-pause-btn {
+    background-color: #007bff;
+  }
+  
+  .dark .audio-player {
+    background-color: darkcyan;
+  }
+  
+  .dark .play-pause-btn {
+    background-color: #0fbcc9;
+  }
+  .settings-btn{
+     padding: 5px;
+     background-color: transparent;
+     border: none;
+     cursor: pointer;
+     width:5px;
+     margin-left: 1em;
+     font-size: larger;
+     font-weight: 900;
+    
+  }
+
+  @media (min-width: 710px) {
+    .audio-player{
+     padding: 1em;
+        
+    }
+
+  }
+

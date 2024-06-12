@@ -3,6 +3,7 @@
     --dark-color: #d6d2d4; 
     --backgroundLightColor: #e3f593;
     --backgroundDarkColor:#304059;
+    
 
 }
 
@@ -33,6 +34,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    width: 100%;
 }
 
 .icon {
