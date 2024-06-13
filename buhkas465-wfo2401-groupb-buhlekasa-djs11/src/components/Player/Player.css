@@ -3,7 +3,7 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-    box-shadow: 1px -11px 5px 3px rgba(213, 226, 217, 0.54);
+    box-shadow: 1px -11px 5px 3px rgba(77, 82, 87, 0.54);
     -webkit-box-shadow: 1px -11px 5px 3px rgba(194, 216, 201, 0.54);
     -moz-box-shadow: 1px -11px 5px 3px rgba(200, 221, 207, 0.54);
   }

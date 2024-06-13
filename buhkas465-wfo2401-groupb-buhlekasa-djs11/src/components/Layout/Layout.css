@@ -7,3 +7,11 @@ body{
     padding: 0;
     margin: 0;
 }
+
+.light{
+    background-color: rgb(206, 193, 193);
+}
+
+.dark{
+    background-color: rgb(107, 101, 101);
+}
