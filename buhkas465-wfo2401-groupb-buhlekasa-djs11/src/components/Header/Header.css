@@ -27,8 +27,9 @@
 
 }
 
-.site-logo{
-    
+a {
+    text-decoration: none;
+    color:inherit;
 }
 
 .Header {
@@ -58,13 +59,18 @@ select {
     font-size: 16px;
 }
 
-@media (min-width: 720px){
+@media (min-width: 710px){
     .Header {
         flex-direction: row;
-        font-size: xx-large;
+        font-size: x-large;
     }
     button{
         min-width: 150%;
     }
 }
 
+@media (min-width: 1000px){
+    .Header {
+        font-size: xx-large;
+    }
+}
