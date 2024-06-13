@@ -27,12 +27,17 @@
 
 }
 
+.site-logo{
+    
+}
+
 .Header {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    text-decoration: none;
 }
 
 .icon {

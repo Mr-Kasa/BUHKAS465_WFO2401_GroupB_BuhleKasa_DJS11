@@ -1,0 +1,5 @@
+.InnertLayout-nav{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 2rem 1rem;
+}

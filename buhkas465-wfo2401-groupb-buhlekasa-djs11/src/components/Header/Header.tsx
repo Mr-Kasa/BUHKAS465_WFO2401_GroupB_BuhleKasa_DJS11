@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./Header.css";
 
 // Define the possible theme values
@@ -23,7 +24,9 @@ const Header: React.FC = () => {
 
   return (
     <header className={`Header ${theme}`}>
-      <h1 className="icon">D.J.S<br />🎙️11🎙️</h1>
+      <Link className="site-logo" to="/"><h1 className="icon">D.J.S<br />🎙️11🎙️</h1></Link>
+      
+      
       <div className="theme-dropdown">
         <select value={theme} onChange={handleThemeChange}>
           <option value="light">Light Mode</option>
