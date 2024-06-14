@@ -5,7 +5,7 @@ import { fetchPodcasts, sortByTitleAlphabetically } from '../../UtilFunctions';
 interface Podcast {
   id: string;
   title: string;
-  imageUrl: string;
+  image: string; // Updated to match the fetched data's property name
   seasons: number;
 }
 
@@ -37,13 +37,11 @@ const Home: React.FC = () => {
 
     getPodcasts();
   }, []);
-  
-    
 
   const podcastElements = podcasts?.map((podcast: Podcast) => (
     <div key={podcast.id} className="podcast-tile">
       <Link to={`/Home/${podcast.id}`}>
-        <img src={podcast.imageUrl} alt={podcast.title} />
+        <img src={podcast.image} alt={podcast.title} />
         <div className="podcast-info">
           <h3>{podcast.title}</h3>
           <p>Seasons: {podcast.seasons}</p>

@@ -29,7 +29,7 @@ export async function fetchPodcasts() {
 export interface Podcast {
   id: string;
   title: string;
-  imageUrl: string;
+  image: string;
   seasons: number;
 }
 
