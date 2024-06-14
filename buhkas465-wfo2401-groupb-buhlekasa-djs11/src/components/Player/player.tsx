@@ -10,6 +10,7 @@ const Player: React.FC = () => {
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement>(new Audio(Mp3));
 
+
   useEffect(() => {
     const storedTime = localStorage.getItem('playbackPosition');
     if (storedTime) {
