@@ -5,7 +5,9 @@
 // function to render shows to ui
 //
 
-export async function fetchPodcasts() {
+
+// UtilFunctions.js
+export async function fetchAllPodcasts() {
   try {
     const response = await fetch('https://podcast-api.netlify.app');
     if (!response.ok) {
@@ -13,10 +15,8 @@ export async function fetchPodcasts() {
     }
     const data = await response.json();
     console.log('Full API Response:', data); // Log the entire response
-    if (data && data.podcasts) {
-      return data.podcasts;
-    } else if (Array.isArray(data)) {
-      return data; // If the response is an array of podcasts
+    if (Array.isArray(data)) {
+      return data;
     } else {
       throw new Error('Invalid response structure');
     }
@@ -25,6 +25,10 @@ export async function fetchPodcasts() {
     throw new Error('Failed to fetch podcasts. Please try again later.');
   }
 }
+
+
+
+
 
 export interface Podcast {
   id: string;
@@ -56,10 +60,6 @@ export function sortByTitleReverseAlphabetically(podcasts: Podcast[]): Podcast[]
     return 0;
   });
 }
-
-
-
-
 
 
 
