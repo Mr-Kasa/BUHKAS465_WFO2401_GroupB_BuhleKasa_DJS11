@@ -5,11 +5,7 @@
     text-align: center;
 }
 
-.HomePagePodcasts {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 
 .podcastList {
     display: grid;
@@ -44,7 +40,7 @@ img {
     width: 100%;
 }
 
-.isLoading{
+.isLoading {
     font-size: xx-large;
     margin-left: 30%;
     display: flex;
@@ -57,21 +53,15 @@ img {
     }
 }
 @media (min-width: 700px) {
-    .isLoading{
-    
+    .isLoading {
         margin-left: 85%;
-      
     }
 }
-
-
 @media (min-width: 1000px) {
     .podcastList {
         grid-template-columns: 1fr 1fr 1fr;
     }
-    .isLoading{
-    
+    .isLoading {
         margin-left: 140%;
-      
     }
 }

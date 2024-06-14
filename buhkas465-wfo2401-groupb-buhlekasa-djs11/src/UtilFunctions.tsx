@@ -1,12 +1,4 @@
-// function to get podcasts 
-//function to get function to get show using id
-//function to sort alphabetically
-// function to sort reverse alphabetically 
-// function to render shows to ui
-//
 
-
-// UtilFunctions.js
 export async function fetchAllPodcasts() {
   try {
     const response = await fetch('https://podcast-api.netlify.app');
@@ -14,7 +6,7 @@ export async function fetchAllPodcasts() {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    console.log('Full API Response:', data); // Log the entire response
+    console.log('Full API Response:', data); 
     if (Array.isArray(data)) {
       return data;
     } else {
@@ -60,6 +52,17 @@ export function sortByTitleReverseAlphabetically(podcasts: Podcast[]): Podcast[]
     return 0;
   });
 }
+
+
+
+export function addIsFavouriteProperty(array) {
+  const favourites = JSON.parse(localStorage.getItem('favourites')) || [];
+  return array.map(item => {
+    item.isFavourite = favourites.includes(item.id);
+    return item;
+  });
+}
+
 
 
 
