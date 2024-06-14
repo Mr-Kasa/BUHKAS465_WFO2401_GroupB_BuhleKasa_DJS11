@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchPodcasts } from '../../UtilFunctions';
+import { fetchPodcasts, sortByTitleAlphabetically } from '../../UtilFunctions';
 
 interface Podcast {
   id: string;
@@ -22,7 +22,8 @@ const Home: React.FC = () => {
       try {
         const fetchedPodcasts = await fetchPodcasts();
         if (fetchedPodcasts && fetchedPodcasts.length > 0) {
-          setPodcasts(fetchedPodcasts);
+          const sortedPodcasts = sortByTitleAlphabetically(fetchedPodcasts);
+          setPodcasts(sortedPodcasts);
         } else {
           throw new Error('No podcasts found');
         }
@@ -36,6 +37,8 @@ const Home: React.FC = () => {
 
     getPodcasts();
   }, []);
+  
+    
 
   const podcastElements = podcasts?.map((podcast: Podcast) => (
     <div key={podcast.id} className="podcast-tile">

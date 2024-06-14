@@ -26,6 +26,39 @@ export async function fetchPodcasts() {
   }
 }
 
+export interface Podcast {
+  id: string;
+  title: string;
+  imageUrl: string;
+  seasons: number;
+}
+
+export function sortByTitleAlphabetically(podcasts: Podcast[]): Podcast[] {
+  return podcasts.sort((a, b) => {
+    if (a.title.toLowerCase() < b.title.toLowerCase()) {
+      return -1;
+    }
+    if (a.title.toLowerCase() > b.title.toLowerCase()) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
+export function sortByTitleReverseAlphabetically(podcasts: Podcast[]): Podcast[] {
+  return podcasts.sort((a, b) => {
+    if (a.title.toLowerCase() < b.title.toLowerCase()) {
+      return 1;
+    }
+    if (a.title.toLowerCase() > b.title.toLowerCase()) {
+      return -1;
+    }
+    return 0;
+  });
+}
+
+
+
 
 
 
