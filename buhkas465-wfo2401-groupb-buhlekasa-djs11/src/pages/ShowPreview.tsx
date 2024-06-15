@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import SeasonPreview from './SeasonPreview';
+
+interface Episode {
+  title: string;
+  description: string;
+  episode: number;
+  file: string;
+}
+
+interface Season {
+  season: number;
+  title: string;
+  image: string;
+  episodes: Episode[];
+}
 
 interface Podcast {
   id: string;
   title: string;
   description: string;
-  seasons: {
-    season: number;
-    title: string;
-    image: string;
-    episodes: {
-      title: string;
-      description: string;
-      episode: number;
-      file: string;
-    }[];
-  }[];
+  seasons: Season[];
 }
 
 const ShowPreview: React.FC = () => {
@@ -50,9 +53,9 @@ const ShowPreview: React.FC = () => {
       <h1>{podcast.title}</h1>
       <p>Description: {podcast.description}</p>
       <div>
-      <Link to={`/shows/${id}/seasons`}>
-      <h3>Seasons: {podcast.seasons.length}</h3>
-      </Link>
+        <Link to={`/show/${id}/seasons`} state={{ seasons: podcast.seasons }}>
+          <h3>Seasons: {podcast.seasons.length}</h3>
+        </Link>
       </div>
     </div>
   );
@@ -68,29 +71,3 @@ export default ShowPreview;
 
 
 
-
-
-     {/* {podcast.seasons.map(season => (
-          <div key={season.season}>
-            <h2>{season.title}</h2>
-            <img src={season.image} alt={season.title} />
-          </div>
-        ))} */}
-
-            {/* {podcast.seasons.map(season => (
-          <div key={season.season}>
-            <h2>{season.title}</h2>
-            <img src={season.image} alt={season.title} />
-            <ul>
-              {season.episodes.map(episode => (
-                <li key={episode.episode}>
-                  <h3>{episode.title}</h3>
-                  <p>{episode.description}</p>
-                  <audio controls>
-                    <source src={episode.file} type="audio/mpeg" />
-                  </audio>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))} */}

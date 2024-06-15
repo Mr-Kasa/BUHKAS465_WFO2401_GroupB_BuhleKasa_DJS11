@@ -6,7 +6,6 @@ export async function fetchAllPodcasts() {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    console.log('Full API Response:', data); 
     if (Array.isArray(data)) {
       return data;
     } else {
