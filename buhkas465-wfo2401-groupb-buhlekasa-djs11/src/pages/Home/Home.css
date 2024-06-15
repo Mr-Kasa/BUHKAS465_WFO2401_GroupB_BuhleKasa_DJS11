@@ -38,12 +38,6 @@ img {
     border-radius: 15px 15px 0px 0px;
 }
 
-.podcastInfoContainer {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 100%;
-}
-
 .isLoading{
     font-size: xx-large;
     margin-left: 30%;

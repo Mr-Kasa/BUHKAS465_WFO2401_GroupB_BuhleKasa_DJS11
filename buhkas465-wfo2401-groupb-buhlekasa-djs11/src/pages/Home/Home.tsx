@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchAllPodcasts, sortByTitleAlphabetically } from '../../UtilFunctions';
-import { addIsFavouriteProperty } from '../../UtilFunctions';
 import './Home.css';
 
 interface Podcast {
@@ -9,7 +8,6 @@ interface Podcast {
   title: string;
   image: string;
   seasons: number;
-  isFavourite: boolean;
 }
 
 const Home: React.FC = () => {
@@ -27,8 +25,7 @@ const Home: React.FC = () => {
     try {
       const fetchedPodcasts = await fetchAllPodcasts();
       if (fetchedPodcasts && fetchedPodcasts.length > 0) {
-        const podcastsWithFavourites = addIsFavouriteProperty(fetchedPodcasts); 
-        const sortedPodcasts = sortByTitleAlphabetically(podcastsWithFavourites);
+        const sortedPodcasts = sortByTitleAlphabetically(fetchedPodcasts);
         setAllPodcasts(sortedPodcasts);
         setDisplayedPodcasts(sortedPodcasts.slice(0, displayCount));
       } else {
@@ -72,43 +69,13 @@ const Home: React.FC = () => {
     }
   }, [displayCount, isLoading, allPodcasts]);
 
-  const toggleFavourite = (id: string) => {
-    const updatedPodcasts = allPodcasts.map(podcast =>
-      podcast.id === id ? { ...podcast, isFavourite: !podcast.isFavourite } : podcast
-    );
-    setAllPodcasts(updatedPodcasts);
-    updateLocalStorage(id);
-  };
-
-  const updateLocalStorage = (id: string) => {
-    let favourites = JSON.parse(localStorage.getItem('favourites')) || [];
-    if (favourites.includes(id)) {
-      favourites = favourites.filter(favId => favId !== id);
-    } else {
-      favourites.push(id);
-    }
-    localStorage.setItem('favourites', JSON.stringify(favourites));
-  };
-
   const podcastElements = displayedPodcasts.map((podcast: Podcast) => (
     <div key={podcast.id} className="podcast-tile">
       <Link to={`/show/${podcast.id}`}>
-        <img src={podcast.image} alt={podcast.title} />
-        <div className='podcastInfoContainer'>
+        <img src={podcast.image} alt={podcast.title} />       
           <div className="podcast-info">
             <h3>{podcast.title}</h3>
             <p>Seasons: {podcast.seasons}</p>
-          </div>
-          <div>
-            <h3
-              onClick={(e) => {
-                e.preventDefault();
-                toggleFavourite(podcast.id);
-              }}
-            >
-              {podcast.isFavourite ? '❤️' : '♡'}
-            </h3>
-          </div>
         </div>
       </Link>
     </div>
@@ -132,4 +99,5 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
 

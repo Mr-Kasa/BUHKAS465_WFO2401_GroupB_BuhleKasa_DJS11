@@ -54,13 +54,7 @@ export function sortByTitleReverseAlphabetically(podcasts: Podcast[]): Podcast[]
 
 
 
-export function addIsFavouriteProperty(array) {
-  const favourites = JSON.parse(localStorage.getItem('favourites')) || [];
-  return array.map(item => {
-    item.isFavourite = favourites.includes(item.id);
-    return item;
-  });
-}
+
 
 
 
