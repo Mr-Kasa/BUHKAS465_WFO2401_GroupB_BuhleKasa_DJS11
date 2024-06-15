@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchAllPodcasts, sortByTitleAlphabetically } from '../../UtilFunctions';
-import { addIsFavouriteProperty } from '../../UtilFunctions'; // Import the function to add isFavourite property
+import { addIsFavouriteProperty } from '../../UtilFunctions';
 import './Home.css';
 
 interface Podcast {
@@ -9,7 +9,7 @@ interface Podcast {
   title: string;
   image: string;
   seasons: number;
-  isFavourite: boolean; // Add isFavourite property to the Podcast interface
+  isFavourite: boolean;
 }
 
 const Home: React.FC = () => {
@@ -27,7 +27,7 @@ const Home: React.FC = () => {
     try {
       const fetchedPodcasts = await fetchAllPodcasts();
       if (fetchedPodcasts && fetchedPodcasts.length > 0) {
-        const podcastsWithFavourites = addIsFavouriteProperty(fetchedPodcasts); // Add isFavourite property to fetched podcasts
+        const podcastsWithFavourites = addIsFavouriteProperty(fetchedPodcasts); 
         const sortedPodcasts = sortByTitleAlphabetically(podcastsWithFavourites);
         setAllPodcasts(sortedPodcasts);
         setDisplayedPodcasts(sortedPodcasts.slice(0, displayCount));
@@ -92,7 +92,7 @@ const Home: React.FC = () => {
 
   const podcastElements = displayedPodcasts.map((podcast: Podcast) => (
     <div key={podcast.id} className="podcast-tile">
-      <Link to={`/Home/${podcast.id}`}>
+      <Link to={`/show/${podcast.id}`}>
         <img src={podcast.image} alt={podcast.title} />
         <div className='podcastInfoContainer'>
           <div className="podcast-info">
@@ -132,3 +132,4 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
