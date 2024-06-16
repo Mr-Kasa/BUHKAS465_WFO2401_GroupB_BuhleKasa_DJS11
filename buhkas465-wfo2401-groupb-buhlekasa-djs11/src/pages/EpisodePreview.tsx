@@ -1,23 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useLocation } from 'react-router-dom';
-
-interface Episode {
-  title: string;
-  description: string;
-  episode: number;
-  file: string;
-}
-
-interface Season {
-  season: number;
-  title: string;
-  image: string;
-  episodes: Episode[];
-}
+import { EpisodeContext } from '../components/Player/EpisodeContext';
+import { Episode } from '../types';
 
 const EpisodePreview: React.FC = () => {
   const location = useLocation();
   const { season } = location.state as { season: Season };
+  const { setCurrentEpisode } = useContext(EpisodeContext);
+
+  const playEpisode = (episode: Episode) => {
+    setCurrentEpisode(episode);
+  };
 
   return (
     <div>
@@ -28,10 +21,7 @@ const EpisodePreview: React.FC = () => {
           <li key={episode.episode}>
             <h3>{episode.title}</h3>
             <p>{episode.description}</p>
-            <audio controls>
-              <source src={episode.file} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
+            <button onClick={() => playEpisode(episode)}>Play</button>
           </li>
         ))}
       </ul>
@@ -40,5 +30,3 @@ const EpisodePreview: React.FC = () => {
 };
 
 export default EpisodePreview;
-
-

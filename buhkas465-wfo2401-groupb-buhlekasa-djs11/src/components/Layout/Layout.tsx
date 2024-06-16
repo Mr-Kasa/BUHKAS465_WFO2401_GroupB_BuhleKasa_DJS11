@@ -1,15 +1,21 @@
-import React from "react";
-import "./Layout.css"
+import React, { useState } from "react";
+import "./Layout.css";
 import Header from "../Header/Header";
-import Player from "../Player/player";
 import { Outlet } from "react-router-dom";
+import Player from "../Player/player";
+import { EpisodeContext } from "../Player/EpisodeContext";
+import { Episode } from "../../types";
 
-export default function Layout(){
-    return(
-        <div className="Layout">
-        <Header/>
-        <Outlet/>
-        <Player/>
-        </div>
-    )
+export default function Layout() {
+  const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
+
+  return (
+    <div className="Layout">
+      <Header />
+      <EpisodeContext.Provider value={{ currentEpisode, setCurrentEpisode }}>
+        <Outlet />
+        <Player episode={currentEpisode} />
+      </EpisodeContext.Provider>
+    </div>
+  );
 }

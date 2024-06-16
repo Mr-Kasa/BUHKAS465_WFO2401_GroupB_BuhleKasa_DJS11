@@ -1,48 +1,87 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Mp3 from '../../HiiiPower.mp3';
 import './Player.css';
 
-const Player: React.FC = () => {
+interface Episode {
+  title: string;
+  description: string;
+  episode: number;
+  file: string;
+}
+
+interface PlayerProps {
+  episode: Episode | null; // Selected episode to play
+}
+
+const Player: React.FC<PlayerProps> = ({ episode }) => {
+  const audioRef = useRef<HTMLAudioElement>(new Audio());
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
   const [volume, setVolume] = useState<number>(1);
   const [playbackRate, setPlaybackRate] = useState<number>(1);
   const [showSettings, setShowSettings] = useState<boolean>(false);
-  const audioRef = useRef<HTMLAudioElement>(new Audio(Mp3));
-
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedTime = localStorage.getItem('playbackPosition');
-    if (storedTime) {
-      setCurrentTime(parseFloat(storedTime));
-    }
+    const audio = audioRef.current;
+
+    const handleLoadedMetadata = () => {
+      setDuration(audio.duration);
+    };
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+    };
+
+    const handlePlay = () => {
+      setIsPlaying(true);
+    };
+
+    const handlePause = () => {
+      setIsPlaying(false);
+    };
 
     const handleEnded = () => {
       setIsPlaying(false);
       setCurrentTime(0);
     };
 
-    audioRef.current.addEventListener('ended', handleEnded);
+    const handleError = (e: Event) => {
+      setError('An error occurred during audio playback.');
+    };
+
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+    audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('error', handleError);
 
     return () => {
-      audioRef.current.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('error', handleError);
     };
   }, []);
 
   useEffect(() => {
-    if (isPlaying) {
-      audioRef.current.play().catch(error => {
-        console.error('Error playing audio:', error);
-      });
-    } else {
-      audioRef.current.pause();
-    }
-  }, [isPlaying]);
+    if (episode) {
+      const audio = audioRef.current;
+      audio.src = episode.file;
+      audio.load();
+      setCurrentTime(0);
+      setError(null);
+      setIsPlaying(false);
 
-  useEffect(() => {
-    audioRef.current.currentTime = currentTime;
-    localStorage.setItem('playbackPosition', currentTime.toString());
-  }, [currentTime]);
+      audio.play().catch((error) => {
+        console.error('Error playing audio:', error);
+        setError('Error playing audio. Please try again.');
+      });
+    }
+  }, [episode]);
 
   useEffect(() => {
     audioRef.current.volume = volume;
@@ -53,43 +92,65 @@ const Player: React.FC = () => {
   }, [playbackRate]);
 
   const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleTimeUpdate = () => {
-    setCurrentTime(audioRef.current.currentTime);
+    const audio = audioRef.current;
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch((error) => {
+        console.error('Error playing audio:', error);
+        setError('Error playing audio. Please try again.');
+      });
+    }
   };
 
   const handleProgressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newTime = (parseFloat(event.target.value) / 100) * audioRef.current.duration;
-    setCurrentTime(newTime);
-    audioRef.current.currentTime = newTime;
+    try {
+      const newTime = (parseFloat(event.target.value) / 100) * duration;
+      setCurrentTime(newTime);
+      audioRef.current.currentTime = newTime;
+    } catch (error) {
+      console.error('Error changing progress:', error);
+      setError('Error changing progress. Please try again.');
+    }
   };
 
   const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = parseFloat(event.target.value) / 100;
-    setVolume(newVolume);
+    try {
+      const newVolume = parseFloat(event.target.value) / 100;
+      setVolume(newVolume);
+    } catch (error) {
+      console.error('Error changing volume:', error);
+      setError('Error changing volume. Please try again.');
+    }
   };
 
   const incrementPlaybackRate = () => {
-    setPlaybackRate(prevRate => Math.min(prevRate + 0.1, 2)); // Max rate of 2x
+    try {
+      setPlaybackRate((prevRate) => Math.min(prevRate + 0.1, 2));
+    } catch (error) {
+      console.error('Error increasing playback rate:', error);
+      setError('Error increasing playback rate. Please try again.');
+    }
   };
 
   const decrementPlaybackRate = () => {
-    setPlaybackRate(prevRate => Math.max(prevRate - 0.1, 0.5)); // Min rate of 0.5x
+    try {
+      setPlaybackRate((prevRate) => Math.max(prevRate - 0.1, 0.5));
+    } catch (error) {
+      console.error('Error decreasing playback rate:', error);
+      setError('Error decreasing playback rate. Please try again.');
+    }
   };
 
   const toggleSettings = () => {
     setShowSettings(!showSettings);
-
   };
 
   return (
     <div className='footer-container'>
       <div className="audio-player">
-        <audio ref={audioRef} src={Mp3} onTimeUpdate={handleTimeUpdate} />
         <div className="controls">
-          <button className="play-pause-btn" onClick={handlePlayPause}>
+          <button className="play-pause-btn" onClick={handlePlayPause} disabled={!episode}>
             {isPlaying ? '⏸️' : '▶️'}
           </button>
           <input
@@ -97,18 +158,18 @@ const Player: React.FC = () => {
             type="range"
             min="0"
             max="100"
-            value={(currentTime / audioRef.current.duration) * 100 || 0}
+            value={(currentTime / duration) * 100}
             onChange={handleProgressChange}
+            disabled={!episode}
           />
           <span className="time-display">
             {Math.floor(currentTime / 60)}:{Math.floor(currentTime % 60).toString().padStart(2, '0')}
           </span>
         </div>
-          <button className="settings-btn" onClick={toggleSettings}>
-            {showSettings ? '🔧' : '⚙️'}
-          </button>
+        <button className="settings-btn" onClick={toggleSettings}>
+          {showSettings ? '🔧' : '⚙️'}
+        </button>
 
-        
         {showSettings && (
           <div className='AudioSettingsDiv'>
             <div className="volume-control">
@@ -131,6 +192,8 @@ const Player: React.FC = () => {
             </div>
           </div>
         )}
+
+        {error && <div className="error-message">{error}</div>}
       </div>
     </div>
   );
