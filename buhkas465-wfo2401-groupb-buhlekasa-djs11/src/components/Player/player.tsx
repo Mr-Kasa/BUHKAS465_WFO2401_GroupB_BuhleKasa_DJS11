@@ -80,7 +80,7 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
 
   useEffect(() => {
     if (episode) {
-     storePlayedEpisode(episode?.file, episode?.title)
+     storePlayedEpisode( episode?.title , episode?.description)
 
       const audio = audioRef.current;
       audio.src = episode.file;

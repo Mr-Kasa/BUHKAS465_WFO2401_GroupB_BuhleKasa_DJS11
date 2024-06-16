@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+
 
 
 export async function fetchAllPodcasts() {
@@ -42,45 +42,58 @@ export function sortByTitleAlphabetically(podcasts: Podcast[]): Podcast[] {
   });
 }
 
-export function sortByTitleReverseAlphabetically(podcasts: Podcast[]): Podcast[] {
-  return podcasts.sort((a, b) => {
-    if (a.title.toLowerCase() < b.title.toLowerCase()) {
-      return 1;
+
+export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
+  console.log("Received parameters:", episodeTitle, episodeDescription);
+
+  const findEpisodeId = (episodeTitle, episodeDescription) => {
+    try {
+      // Retrieve episodes array from local storage
+      const episodes = JSON.parse(localStorage.getItem('episodes')) || [];
+      
+      if (!episodes || episodes.length === 0) {
+        console.error("No episodes found in local storage.");
+        return null;
+      }
+
+      console.log("Retrieved episodes from local storage:", episodes);
+
+      let foundEpisodeId = null;
+
+      // Loop through each episode to find the matching one
+      episodes.forEach(episode => {
+        if (episode.description === episodeDescription) {
+          console.log('Matching description found for episode:', episode);
+        }
+        if (episode.episodeTitle === episodeTitle) {
+          console.log('Matching title found for episode:', episode);
+        }
+        if (episode.episodeTitle === episodeTitle && episode.description === episodeDescription) {
+          foundEpisodeId = episode.episodeId || null;
+          console.log('Matching episode found:', episode);
+        }
+      });
+
+      // If episode is found, log it and its ID
+      if (foundEpisodeId) {
+        console.log('Episode found with ID:', foundEpisodeId);
+      } else {
+        console.error('No episode found with the given title and description.');
+      }
+
+      return foundEpisodeId;
+    } catch (error) {
+      console.error('Error finding episode ID:', error);
+      return null;
     }
-    if (a.title.toLowerCase() > b.title.toLowerCase()) {
-      return -1;
-    }
-    return 0;
-  });
-}
-
-
-export const storePlayedEpisode = (episodeFile, episodeTitle) => {
-  console.log(episodeFile, episodeTitle);
-
-  const findEpisodeId = (episodeFile, episodeTitle) => {
-    // Retrieve episodes array from local storage
-    const episodes = JSON.parse(localStorage.getItem('episodes')) || [];
-  
-    // Find the episode with matching file and episodeTitle
-    const foundEpisode = episodes.find(episode => episode.file === episodeFile && episode.episodeTitle === episodeTitle);
-  
-    // If episode is found, log it and its ID
-    if (foundEpisode) {
-      console.log('Episode found:', foundEpisode);
-      console.log('Episode ID:', foundEpisode.episodeId);
-    }
-
-    // If episode is found, return its episodeId, otherwise return null
-    return foundEpisode ? foundEpisode.episodeId : null;
   };
 
   // Get the episodeId using findEpisodeId function
-  const episodeId = findEpisodeId(episodeFile, episodeTitle);
+  const episodeId = findEpisodeId(episodeTitle, episodeDescription);
 
   // Ensure episodeId is valid before storing
   if (!episodeId) {
-    console.error('Invalid episodeId for the given episodeFile and episodeTitle.');
+    console.error('Invalid episodeId for the given episodeTitle and episodeDescription.');
     return;
   }
 
@@ -91,27 +104,18 @@ export const storePlayedEpisode = (episodeFile, episodeTitle) => {
   };
 
   try {
-    // Get existing played episodes from localStorage
-    let playedEpisodes = JSON.parse(localStorage.getItem('playedEpisodes')) || [];
+    // Get existing history from localStorage
+    let history = JSON.parse(localStorage.getItem('history')) || [];
 
-    // Add the new episode to the array
-    playedEpisodes.push(playedEpisode);
+    // Add the new episode to the history array
+    history.push(playedEpisode);
 
-    // Save the updated array back to localStorage
-    localStorage.setItem('playedEpisodes', JSON.stringify(playedEpisodes));
+    // Save the updated history array back to localStorage
+    localStorage.setItem('history', JSON.stringify(history));
 
-    // Retrieve all the data of the found episode object
-    const allEpisodeData = JSON.parse(localStorage.getItem('episodes')) || [];
-    const foundEpisodeData = allEpisodeData.find(episode => episode.file === episodeFile && episode.episodeTitle === episodeTitle);
-
-    // Ensure found episode data is valid before storing in history
-    if (foundEpisodeData) {
-      let history = JSON.parse(localStorage.getItem('history')) || [];
-      history.push(foundEpisodeData);
-      localStorage.setItem('history', JSON.stringify(history));
-    }
+    console.log('Played episode stored successfully in history:', playedEpisode);
   } catch (error) {
-    console.error('Error storing played episode:', error);
+    console.error('Error storing played episode in history:', error);
   }
 };
 
@@ -127,6 +131,32 @@ export const storePlayedEpisode = (episodeFile, episodeTitle) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+import { useState, useEffect } from 'react';
+
+interface Episode {
+    id: string;
+    title: string;
+    image: string;
+    episodeId: string;
+    episodeTitle: string;
+    showId: string;
+    showTitle: string;
+    showImage: string;
+    seasonImage: string;
+    file: string;
+    isFavourite: boolean;
+    description: string; // Added description field
+}
 
 export const useFetchAndSetFavouriteEpisodes = (): Episode[] => {
     const [favouriteEpisodes, setFavouriteEpisodes] = useState<Episode[]>([]);
@@ -181,7 +211,8 @@ export const useFetchAndSetFavouriteEpisodes = (): Episode[] => {
                         showImage: show.image,
                         seasonImage: season.image,
                         file: episode.file,
-                        isFavourite: false
+                        isFavourite: false,
+                        description: episode.description
                     }))
                 );
 
