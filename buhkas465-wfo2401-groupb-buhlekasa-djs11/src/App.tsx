@@ -6,8 +6,8 @@ import Home from './pages/Home/Home';
 import InnerLayout from './components/InnerLayout/InnerLayout';
 import History from "./pages/History";
 import Favourites from "./pages/Favourites/Favourites";
-import ShowPreview from './pages/ShowPreview';
-import SeasonPreview from './pages/SeasonPreview';
+import ShowPreview from './pages/ShowPreview/ShowPreview';
+import SeasonPreview from './pages/SeasonPreview/SeasonPreview';
 import EpisodePreview from './pages/EpisodePreview';
 
 function App() {

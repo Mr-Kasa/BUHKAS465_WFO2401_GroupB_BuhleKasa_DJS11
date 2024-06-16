@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
+import "./SeasonPreview.css"
 
 interface Episode {
   title: string;

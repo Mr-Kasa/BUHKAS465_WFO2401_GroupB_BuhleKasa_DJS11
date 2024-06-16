@@ -1,5 +1,5 @@
 .footer-container{
-    display: none;
+    margin-top: 50em;
     z-index: 10;
     position: fixed;
     bottom: 0;
