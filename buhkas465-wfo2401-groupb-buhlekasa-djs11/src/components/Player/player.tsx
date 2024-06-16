@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Player.css';
+import { storePlayedEpisode } from '../../UtilFunctions';
 
 interface Episode {
+  id: string;
   title: string;
   description: string;
   episode: number;
@@ -9,10 +11,19 @@ interface Episode {
 }
 
 interface PlayerProps {
-  episode: Episode | null; // Selected episode to play
+  episode: Episode | null;
+  showId: string;
+  showTitle: string;
+  seasonImg: string;
+  seasonNumber: number;
 }
 
-const Player: React.FC<PlayerProps> = ({ episode }) => {
+
+
+const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, seasonNumber }) => {
+
+//  console.log(`episode number  = ${episode?.file}`,`Episode title = ${episode?.title}`)
+
   const audioRef = useRef<HTMLAudioElement>(new Audio());
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
@@ -46,7 +57,7 @@ const Player: React.FC<PlayerProps> = ({ episode }) => {
       setCurrentTime(0);
     };
 
-    const handleError = (e: Event) => {
+    const handleError = () => {
       setError('An error occurred during audio playback.');
     };
 
@@ -69,6 +80,8 @@ const Player: React.FC<PlayerProps> = ({ episode }) => {
 
   useEffect(() => {
     if (episode) {
+     storePlayedEpisode(episode?.file, episode?.title)
+
       const audio = audioRef.current;
       audio.src = episode.file;
       audio.load();
@@ -81,7 +94,7 @@ const Player: React.FC<PlayerProps> = ({ episode }) => {
         setError('Error playing audio. Please try again.');
       });
     }
-  }, [episode]);
+  }, [episode, showId, showTitle, seasonImg, seasonNumber]);
 
   useEffect(() => {
     audioRef.current.volume = volume;
@@ -158,7 +171,7 @@ const Player: React.FC<PlayerProps> = ({ episode }) => {
             type="range"
             min="0"
             max="100"
-            value={(currentTime / duration) * 100}
+            value={!isNaN(duration) ? ((currentTime / duration) * 100).toString() : "0"}
             onChange={handleProgressChange}
             disabled={!episode}
           />

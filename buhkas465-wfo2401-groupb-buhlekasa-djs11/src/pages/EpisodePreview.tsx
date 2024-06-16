@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { EpisodeContext } from '../components/Player/EpisodeContext';
-import { Episode } from '../types';
+import { Episode, Season } from '../types';
 
 const EpisodePreview: React.FC = () => {
   const location = useLocation();

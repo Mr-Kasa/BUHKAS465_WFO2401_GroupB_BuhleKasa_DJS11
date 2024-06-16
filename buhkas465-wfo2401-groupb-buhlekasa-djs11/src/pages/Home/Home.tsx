@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchAllPodcasts, sortByTitleAlphabetically } from '../../UtilFunctions';
+import { fetchAllPodcasts, sortByTitleAlphabetically, useFetchAndSetFavouriteEpisodes } from '../../UtilFunctions';
 import './Home.css';
 
 interface Podcast {
@@ -17,6 +17,9 @@ const Home: React.FC = () => {
   const [isInitialLoading, setIsInitialLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [displayCount, setDisplayCount] = useState(20);
+
+  // Call your custom hook here
+  const favouriteEpisodes = useFetchAndSetFavouriteEpisodes();
 
   const loadAllPodcasts = async () => {
     setIsInitialLoading(true);
@@ -99,5 +102,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
-

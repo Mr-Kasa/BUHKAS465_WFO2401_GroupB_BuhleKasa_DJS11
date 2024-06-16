@@ -4,4 +4,10 @@ export interface Episode {
     episode: number;
     file: string;
   }
+
+export interface Season {
+   title:string;
+   season:number;
+   episodes: [];
+}
   
