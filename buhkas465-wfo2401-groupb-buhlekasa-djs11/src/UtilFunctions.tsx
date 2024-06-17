@@ -60,7 +60,7 @@ export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
 
       // Loop through each episode to find the matching one
       episodes.forEach(episode => {
-        if (episode.episodeTitle === episodeTitle && episode.description === episodeDescription) {
+        if (episode.description === episodeDescription) {
           foundEpisodeId = episode.episodeId || null;
         }
       });
@@ -101,6 +101,7 @@ export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
   } catch (error) {
     console.error('Error storing played episode in history:', error);
   }
+  
 };
 
 

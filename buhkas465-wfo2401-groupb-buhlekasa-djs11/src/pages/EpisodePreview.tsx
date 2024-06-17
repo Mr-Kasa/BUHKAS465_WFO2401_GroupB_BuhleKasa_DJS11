@@ -20,23 +20,23 @@ const EpisodePreview: React.FC = () => {
     setCurrentEpisode(episode);
   };
 
-  const findEpisodeId = (episodeTitle: string, episodeDescription: string): string | null => {
-    console.log('Searching for episode with values:', { episodeTitle, episodeDescription });
-
+  const findEpisodeId = ( episodeDescription: string): string | null => {
+    console.log('Searching for episode with values:', {  episodeDescription });
+  
     try {
       const episodes = JSON.parse(localStorage.getItem('episodes')) || [];
-
+  
       if (!episodes || episodes.length === 0) {
         console.error('No episodes found in local storage.');
         return null;
       }
-
+  
       const matchingEpisode = episodes.find(
-        (episode: Episode) =>
-          episode.episodeTitle === episodeTitle &&
+        (episode: { description: string }) =>
+          
           episode.description === episodeDescription
       );
-
+  
       if (matchingEpisode) {
         console.log('Matching episode found:', matchingEpisode);
         return matchingEpisode.episodeId;
@@ -49,9 +49,9 @@ const EpisodePreview: React.FC = () => {
       return null;
     }
   };
-
+  
   const handleEpisodeClick = (episode: Episode) => {
-    const episodeId = findEpisodeId(episode.title, episode.description);
+    const episodeId = findEpisodeId( episode.description);
     if (episodeId) {
       console.log('Episode ID found:', episodeId);
       // Perform actions with the episode ID, like storing playback history
