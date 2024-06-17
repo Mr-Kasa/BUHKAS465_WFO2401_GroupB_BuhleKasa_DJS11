@@ -44,6 +44,7 @@ export function sortByTitleAlphabetically(podcasts: Podcast[]): Podcast[] {
 
 
 export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
+  console.log
   console.log("Received parameters:", episodeTitle, episodeDescription);
 
   const findEpisodeId = (episodeTitle, episodeDescription) => {
@@ -56,7 +57,7 @@ export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
         return null;
       }
 
-      console.log("Retrieved episodes from local storage:", episodes);
+      // console.log("Retrieved episodes from local storage:", episodes);
 
       let foundEpisodeId = null;
 
@@ -65,6 +66,7 @@ export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
         if (episode.description === episodeDescription) {
           console.log('Matching description found for episode:', episode);
         }
+      
         if (episode.episodeTitle === episodeTitle) {
           console.log('Matching title found for episode:', episode);
         }
@@ -88,37 +90,30 @@ export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
     }
   };
 
-  // Get the episodeId using findEpisodeId function
   const episodeId = findEpisodeId(episodeTitle, episodeDescription);
 
-  // Ensure episodeId is valid before storing
   if (!episodeId) {
     console.error('Invalid episodeId for the given episodeTitle and episodeDescription.');
     return;
   }
 
-  // Construct the played episode object
+  const now = new Date(); // Get current date and time
+
   const playedEpisode = {
     episodeId: episodeId,
-    episodeTitle: episodeTitle
+    episodeTitle: episodeTitle,
+    playedAt: now.toISOString() // Store timestamp in ISO 8601 format
   };
 
   try {
-    // Get existing history from localStorage
     let history = JSON.parse(localStorage.getItem('history')) || [];
-
-    // Add the new episode to the history array
     history.push(playedEpisode);
-
-    // Save the updated history array back to localStorage
     localStorage.setItem('history', JSON.stringify(history));
-
     console.log('Played episode stored successfully in history:', playedEpisode);
   } catch (error) {
     console.error('Error storing played episode in history:', error);
   }
 };
-
 
 
 
@@ -159,81 +154,87 @@ interface Episode {
 }
 
 export const useFetchAndSetFavouriteEpisodes = (): Episode[] => {
-    const [favouriteEpisodes, setFavouriteEpisodes] = useState<Episode[]>([]);
+  const [favouriteEpisodes, setFavouriteEpisodes] = useState<Episode[]>([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('https://podcast-api.netlify.app');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://podcast-api.netlify.app');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
 
-                const showdata: Episode[] = data.map((show: any) => ({
-                    id: show.id,
-                    title: show.title,
-                    image: show.image
-                }));
+        const showdata: Episode[] = data.map((show: any) => ({
+          id: show.id,
+          title: show.title,
+          image: show.image,
+        }));
 
-                const favourites = JSON.parse(localStorage.getItem('Shows')) || [];
-                if (favourites.length === 0) {
-                    localStorage.setItem('Shows', JSON.stringify(showdata));
-                }
-
-                await Promise.all(showdata.map((show: Episode) => fetchDetailedShowData(show.id)));
-            } catch (error) {
-                console.error('Failed to fetch show data:', error);
-            }
+        const favourites = JSON.parse(localStorage.getItem('Shows')) || [];
+        if (favourites.length === 0) {
+          localStorage.setItem('Shows', JSON.stringify(showdata));
         }
 
-        const fetchDetailedShowData = async (showId: string) => {
-            try {
-                const response = await fetch(`https://podcast-api.netlify.app/id/${showId}`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                const favourites = JSON.parse(localStorage.getItem('Shows')) || [];
-                const show = favourites.find((fav: any) => fav.id === showId);
+        await Promise.all(showdata.map((show: Episode) => fetchDetailedShowData(show.id)));
+      } catch (error) {
+        console.error('Failed to fetch show data:', error);
+      }
+    };
 
-                if (!show) {
-                    console.error('Show not found in Shows');
-                    return;
-                }
+    const fetchDetailedShowData = async (showId: string) => {
+      try {
+        const response = await fetch(`https://podcast-api.netlify.app/id/${showId}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        const favourites = JSON.parse(localStorage.getItem('Shows')) || [];
+        const show = favourites.find((fav: any) => fav.id === showId);
 
-                const episodesData = data.seasons.flatMap((season: any) =>
-                    season.episodes.map((episode: any) => ({
-                        showId: showId,
-                        episodeId: `episode-${showId}-${season.season}-${episode.episode}`,
-                        episodeTitle: episode.title,
-                        showTitle: show.title,
-                        showImage: show.image,
-                        seasonImage: season.image,
-                        file: episode.file,
-                        isFavourite: false,
-                        description: episode.description
-                    }))
-                );
-
-                const storedEpisodes = JSON.parse(localStorage.getItem('episodes')) || [];
-                const updatedEpisodes = [...storedEpisodes, ...episodesData];
-                
-                const uniqueEpisodes = Array.from(new Set(updatedEpisodes.map((e: Episode) => e.episodeId)))
-                    .map((id: string) => updatedEpisodes.find((e: Episode) => e.episodeId === id));
-
-                localStorage.setItem('episodes', JSON.stringify(uniqueEpisodes));
-
-                const favouriteEpisodesFiltered = uniqueEpisodes.filter((episode: Episode) => episode.isFavourite);
-
-                setFavouriteEpisodes(favouriteEpisodesFiltered);
-            } catch (error) {
-                console.error('Failed to fetch detailed show data:', error);
-            }
+        if (!show) {
+          console.error('Show not found in Shows');
+          return;
         }
 
-        fetchData();
-    }, []);
+        const episodesData = data.seasons.flatMap((season: any) =>
+          season.episodes.map((episode: any) => ({
+            showId: showId,
+            episodeId: `episode-${showId}-${season.season}-${episode.episode}`,
+            episodeTitle: episode.title,
+            showTitle: show.title,
+            showImage: show.image,
+            seasonImage: season.image,
+            file: episode.file,
+            isFavourite: false,
+            description: episode.description, // Include description property
+          }))
+        );
 
-    return favouriteEpisodes;
+        const storedEpisodes = JSON.parse(localStorage.getItem('episodes')) || [];
+        const updatedEpisodes = [...storedEpisodes, ...episodesData];
+
+        const uniqueEpisodes = Array.from(new Set(updatedEpisodes.map((e: Episode) => e.episodeId)))
+          .map((id: string) => updatedEpisodes.find((e: Episode) => e.episodeId === id));
+
+        // Update description in existing episodes (optional)
+        const episodesWithDescriptions = uniqueEpisodes.map((episode) => {
+          const storedEpisode = storedEpisodes.find((e) => e.episodeId === episode.episodeId);
+          return storedEpisode?.description ? episode : { ...episode, description: episode.description };
+        });
+
+        localStorage.setItem('episodes', JSON.stringify(episodesWithDescriptions)); // Store episodes with descriptions
+
+        const favouriteEpisodesFiltered = uniqueEpisodes.filter((episode: Episode) => episode.isFavourite);
+
+        setFavouriteEpisodes(favouriteEpisodesFiltered);
+      } catch (error) {
+        console.error('Failed to fetch detailed show data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return favouriteEpisodes;
 };
