@@ -10,9 +10,18 @@ export default function History() {
     setHistory(storedHistory);
   }, []);
 
+  const clearHistory = () => {
+    // Clear the history in state and local storage
+    setHistory([]);
+    localStorage.setItem('history', JSON.stringify([]));
+  };
+
   return (
     <div>
-      <h1>History List</h1>
+      <div>
+        <button onClick={clearHistory}>Clear History</button>
+        <h1>History List</h1>
+      </div>
       <ul>
         {history.map((episode, index) => (
           <li key={index}>
