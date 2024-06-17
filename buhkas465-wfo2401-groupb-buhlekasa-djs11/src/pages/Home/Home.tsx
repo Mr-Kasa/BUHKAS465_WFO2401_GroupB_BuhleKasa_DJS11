@@ -18,8 +18,7 @@ const Home: React.FC = () => {
   const [error, setError] = useState<Error | null>(null);
   const [displayCount, setDisplayCount] = useState(20);
 
-  // Call your custom hook here
-  const favouriteEpisodes = useFetchAndSetFavouriteEpisodes();
+ 
 
   const loadAllPodcasts = async () => {
     setIsInitialLoading(true);
@@ -83,7 +82,7 @@ const Home: React.FC = () => {
       </Link>
     </div>
   ));
-
+  useFetchAndSetFavouriteEpisodes();
   return (
     <div className="HomePagePodcasts">
       <div className="podcastList">

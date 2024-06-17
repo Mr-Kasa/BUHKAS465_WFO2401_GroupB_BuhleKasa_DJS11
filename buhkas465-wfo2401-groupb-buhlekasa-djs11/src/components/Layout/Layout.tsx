@@ -8,7 +8,7 @@ import { Episode } from "../../types";
 
 export default function Layout({ show, season }) {
   const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
-  console.log("in layout" + show.id)
+  
   return (
     <div className="Layout">
       <Header />

@@ -44,43 +44,30 @@ export function sortByTitleAlphabetically(podcasts: Podcast[]): Podcast[] {
 
 
 export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
-  console.log
-  console.log("Received parameters:", episodeTitle, episodeDescription);
+  // Received parameters can be removed as they don't provide essential information during execution
 
   const findEpisodeId = (episodeTitle, episodeDescription) => {
     try {
       // Retrieve episodes array from local storage
       const episodes = JSON.parse(localStorage.getItem('episodes')) || [];
-      
+
       if (!episodes || episodes.length === 0) {
         console.error("No episodes found in local storage.");
         return null;
       }
 
-      // console.log("Retrieved episodes from local storage:", episodes);
-
       let foundEpisodeId = null;
 
       // Loop through each episode to find the matching one
       episodes.forEach(episode => {
-        if (episode.description === episodeDescription) {
-          console.log('Matching description found for episode:', episode);
-        }
-      
-        if (episode.episodeTitle === episodeTitle) {
-          console.log('Matching title found for episode:', episode);
-        }
         if (episode.episodeTitle === episodeTitle && episode.description === episodeDescription) {
           foundEpisodeId = episode.episodeId || null;
-          console.log('Matching episode found:', episode);
         }
       });
 
-      // If episode is found, log it and its ID
-      if (foundEpisodeId) {
-        console.log('Episode found with ID:', foundEpisodeId);
-      } else {
+      if (!foundEpisodeId) {
         console.error('No episode found with the given title and description.');
+        return null;
       }
 
       return foundEpisodeId;
@@ -109,7 +96,8 @@ export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
     let history = JSON.parse(localStorage.getItem('history')) || [];
     history.push(playedEpisode);
     localStorage.setItem('history', JSON.stringify(history));
-    console.log('Played episode stored successfully in history:', playedEpisode);
+    // Success message can be removed if desired for a truly clean console
+    // console.log('Played episode stored successfully in history:', playedEpisode);
   } catch (error) {
     console.error('Error storing played episode in history:', error);
   }
