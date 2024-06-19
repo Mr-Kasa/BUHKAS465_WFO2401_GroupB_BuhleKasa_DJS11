@@ -8,10 +8,10 @@ import History from "./pages/History/History";
 import Favourites from "./pages/Favourites/Favourites";
 import ShowPreview from './pages/ShowPreview/ShowPreview';
 import SeasonPreview from './pages/SeasonPreview/SeasonPreview';
-import EpisodePreview from './pages/EpisodePreview';
+import EpisodePreview from './pages/EpisodePreview/EpisodePreview';
 
 function App() {
-  // Assuming you have showData and seasonData variables containing the relevant data
+  
   const showData = { id: 'show_id', title: 'Show Title' };
   const seasonData = { id: 'season_id', imageUrl: 'season_image_url', number: 1 };
 

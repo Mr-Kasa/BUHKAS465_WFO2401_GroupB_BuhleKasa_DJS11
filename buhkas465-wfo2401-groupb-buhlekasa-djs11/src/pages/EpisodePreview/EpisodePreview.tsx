@@ -1,7 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { EpisodeContext } from '../components/Player/EpisodeContext';
-import { Episode, Season } from '../types';
+import { EpisodeContext } from '../../components/Player/EpisodeContext';
+import { Episode, Season } from '../../types';
+import "./episodePreview.css"
+
 
 const EpisodePreview: React.FC = () => {
   const location = useLocation();
@@ -78,22 +80,27 @@ const EpisodePreview: React.FC = () => {
   return (
     <div>
       <h1>{season.title}</h1>
-      <img src={season.image} alt={season.title} />
-      <ul>
+      <div className='EpisodesContainer'>
+      <img className='seasonImg' src={season.image} alt={season.title} />
+      <ul className='listItem'>
         {season.episodes.map((episode) => {
+          
           const storedEpisode = episodes.find(ep => ep.episodeTitle === episode.title && ep.description === episode.description) || episode;
           return (
-            <li key={storedEpisode.episodeId}>
+            <div className='episodeTile'>
+            <li className='listItem' key={storedEpisode.episodeId}>
               <h3>{storedEpisode.episodeTitle}</h3>
               <p>{storedEpisode.description}</p>
               <button onClick={() => handleEpisodeClick(storedEpisode)}>Play</button>
-              <button onClick={() => toggleFavourite(storedEpisode)}>
-                {storedEpisode.isFavourite ? 'Unfavourite' : 'Favourite'}
+              <button className='favoutiteButton' onClick={() => toggleFavourite(storedEpisode)}>
+                {storedEpisode.isFavourite ?'❤️':  '♡' }
               </button>
             </li>
+            </div>
           );
         })}
       </ul>
+      </div>
     </div>
   );
 };

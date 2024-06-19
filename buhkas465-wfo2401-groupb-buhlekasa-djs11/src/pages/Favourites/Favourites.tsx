@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './Favourite.css'
+import './Favourite.css';
+import {
+  sortPodcastsByTitleAZ,
+  sortPodcastsByTitleZA,
+  sortPodcastsByDateOldest,
+  sortPodcastsByDateNewest,
+} from '../../UtilFunctions'
 
 const getEpisodesFromLocalStorage = () => {
   const episodes = localStorage.getItem('episodes');
@@ -9,6 +15,7 @@ const getEpisodesFromLocalStorage = () => {
 const Favourites = () => {
   const [episodes, setEpisodes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState(''); // State to track current sorting method
 
   useEffect(() => {
     setTimeout(() => {
@@ -22,8 +29,6 @@ const Favourites = () => {
     const updatedEpisodes = episodes.map((ep) => {
       if (ep.episodeId === episode.episodeId) {
         const updatedEpisode = { ...ep, isFavourite: !ep.isFavourite };
-        console.log('Favourites clicked');
-        console.log('Updated Episode:', updatedEpisode);
         return updatedEpisode;
       }
       return ep;
@@ -33,13 +38,29 @@ const Favourites = () => {
     localStorage.setItem('episodes', JSON.stringify(updatedEpisodes));
   };
 
-  useEffect(() => {
-    const favouriteEpisodeTitles = episodes
-      .filter(ep => ep.isFavourite)
-      .map(ep => ep.episodeTitle);
+  const handleSortAZ = () => {
+    if (sortBy !== 'AZ') {
+      const sortedEpisodes = sortPodcastsByTitleAZ(episodes);
+      setEpisodes(sortedEpisodes);
+      setSortBy('AZ');
+    } else {
+      const sortedEpisodes = sortPodcastsByTitleZA(episodes);
+      setEpisodes(sortedEpisodes);
+      setSortBy('ZA');
+    }
+  };
 
-    console.log('Favourite Episode Titles on Page Load:', favouriteEpisodeTitles);
-  }, [episodes]);
+  const handleSortNewest = () => {
+    if (sortBy !== 'Newest') {
+      const sortedEpisodes = sortPodcastsByDateNewest(episodes);
+      setEpisodes(sortedEpisodes);
+      setSortBy('Newest');
+    } else {
+      const sortedEpisodes = sortPodcastsByDateOldest(episodes);
+      setEpisodes(sortedEpisodes);
+      setSortBy('Oldest');
+    }
+  };
 
   const favouriteEpisodes = episodes.filter(ep => ep.isFavourite);
 
@@ -47,6 +68,14 @@ const Favourites = () => {
     <div className="favourites-container">
       <div className="favourites-header">
         <h1>Favourite Episodes</h1>
+        <div className="sort-buttons">
+          <button onClick={handleSortAZ}>
+            {sortBy === 'AZ' ? 'Sort Z-A' : 'Sort A-Z'}
+          </button>
+          <button onClick={handleSortNewest}>
+            {sortBy === 'Newest' ? 'Sort Oldest-Newest' : 'Sort Newest-Oldest'}
+          </button>
+        </div>
       </div>
       {loading ? (
         <p className="loading">Loading...</p>

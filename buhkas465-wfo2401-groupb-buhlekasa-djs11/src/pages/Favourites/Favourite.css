@@ -1,66 +1,86 @@
-/* Favourites.css */
-
 .favourites-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    width: 100%;
-  }
-  
-  .favourites-header {
-    margin-bottom: 1rem;
-  }
-  
-  .favourites-header h1 {
-    font-size: 2rem;
-    margin: 0;
-  }
-  
-  .favourites-list {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    width: 100%;
-    max-width: 1200px;
-  }
-  
-  .favourites-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 1rem;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .favourites-item img {
-    width: 100%;
-    max-width: 150px;
-    border-radius: 5px;
-  }
-  
-  .favourites-item h2 {
-    margin: 1rem 0;
-  }
-  
-  .favourite-button {
-    padding: 0.5rem 1rem;
-    border: none;
-    background-color: #333;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .favourite-button:hover {
-    background-color: #555;
-  }
-  
-  .no-favourites {
-    font-size: 1.2rem;
-    color: #666;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  width: 100%;
+}
+
+.favourites-header {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.favourites-header h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.sort-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.sort-buttons button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.sort-buttons button:hover {
+  background-color: #555;
+}
+
+.favourites-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.favourites-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.favourites-item img {
+  width: 100%;
+  max-width: 150px;
+  border-radius: 5px;
+}
+
+.favourites-item h2 {
+  margin: 1rem 0;
+}
+
+.favourite-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.favourite-button:hover {
+  background-color: #555;
+}
+
+.no-favourites {
+  font-size: 1.2rem;
+  color: #666;
+}

@@ -1,0 +1,46 @@
+body{
+    align-items: center;
+    margin: 0;
+}
+
+.favoutiteButton{
+    background-color: transparent;
+    border: 0;
+}
+.episodeTile{
+        padding: 1rem;
+        margin: 1em;
+        border-radius: 15px;
+        aspect-ratio: 1 / 1;
+        padding: 1rem;
+        margin: 1em;
+}
+.EpisodesContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    align-self: center;
+}
+.seasonImg{
+    border-radius: inherit;
+}
+
+.light{ 
+    .EpisodesContainer{
+    background-color: rgb(218, 198, 170);}
+    .episodeTile{
+        background-color: rgb(231, 175, 70);}
+}
+
+.dark{ 
+    .EpisodesContainer{
+    background-color:darkcyan}
+    .episodeTile{
+        background-color: rgb(14, 177, 150);}
+}
+
+.listItem{
+    text-decoration: none;
+}
