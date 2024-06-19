@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchShowsByGenre, useFetchAndSetFavouriteEpisodes, formatDateTime, sortPodcastsByTitleAZ, sortPodcastsByTitleZA } from '../../UtilFunctions';
+import { fetchShowsByGenre, useFetchAndSetFavouriteEpisodes, formatDateTime, sortPodcastsByTitleAZ, sortPodcastsByTitleZA, sortPodcastsByDateOldest, sortPodcastsByDateNewest } from '../../UtilFunctions';
 import { Genres } from '../../genres';
-
 import './Home.css';
 
 interface Podcast {
@@ -21,7 +20,8 @@ const Home: React.FC = () => {
   const [isInitialLoading, setIsInitialLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
-  const [sortOrder, setSortOrder] = useState<'AZ' | 'ZA'>('AZ');
+  const [titleSortOrder, setTitleSortOrder] = useState<'AZ' | 'ZA'>('AZ');
+  const [dateSortOrder, setDateSortOrder] = useState<'Oldest' | 'Newest'>('Newest');
 
   const loadPodcasts = async (genreId: number | null = null) => {
     setIsInitialLoading(true);
@@ -31,9 +31,9 @@ const Home: React.FC = () => {
       console.log('Fetching podcasts for genre ID:', genreId);
       const fetchedShows = await fetchShowsByGenre(genreId !== null ? genreId.toString() : '');
       console.log('Fetched shows:', fetchedShows);
+
       setAllPodcasts(fetchedShows);
-      setDisplayedPodcasts(sortPodcastsByTitleAZ(fetchedShows));
-      console.log(`Number of displayed items: ${fetchedShows.length}`);
+      applyAllFilters(fetchedShows);
     } catch (error: any) {
       console.error('Error fetching podcasts:', error);
       setError(error);
@@ -42,24 +42,30 @@ const Home: React.FC = () => {
     }
   };
 
+  const applyAllFilters = (podcasts: Podcast[]) => {
+    let filteredPodcasts = selectedGenre !== null
+      ? podcasts.filter(podcast => podcast.genres.includes(selectedGenre))
+      : podcasts;
+
+    filteredPodcasts = titleSortOrder === 'AZ'
+      ? sortPodcastsByTitleAZ(filteredPodcasts)
+      : sortPodcastsByTitleZA(filteredPodcasts);
+
+    filteredPodcasts = dateSortOrder === 'Oldest'
+      ? sortPodcastsByDateOldest(filteredPodcasts)
+      : sortPodcastsByDateNewest(filteredPodcasts);
+
+    setDisplayedPodcasts(filteredPodcasts);
+    console.log(`Number of displayed items after sorting and filtering: ${filteredPodcasts.length}`);
+  };
+
   useEffect(() => {
     loadPodcasts();
   }, []);
 
   useEffect(() => {
-    if (selectedGenre !== null) {
-      const filteredPodcasts = allPodcasts.filter(podcast => podcast.genres.includes(selectedGenre));
-      setDisplayedPodcasts(sortOrder === 'AZ' ? sortPodcastsByTitleAZ(filteredPodcasts) : sortPodcastsByTitleZA(filteredPodcasts));
-      console.log(`Number of displayed items after genre filter: ${filteredPodcasts.length}`);
-    } else {
-      setDisplayedPodcasts(sortOrder === 'AZ' ? sortPodcastsByTitleAZ(allPodcasts) : sortPodcastsByTitleZA(allPodcasts));
-      console.log(`Number of displayed items (all genres): ${allPodcasts.length}`);
-    }
-  }, [selectedGenre, allPodcasts, sortOrder]);
-
-  useEffect(() => {
-    console.log(`Number of displayed items: ${displayedPodcasts.length}`);
-  }, [displayedPodcasts]);
+    applyAllFilters(allPodcasts);
+  }, [selectedGenre, titleSortOrder, dateSortOrder]);
 
   const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const genreId = e.target.value ? Number(e.target.value) : null;
@@ -67,8 +73,12 @@ const Home: React.FC = () => {
     setSelectedGenre(genreId);
   };
 
-  const handleSortToggle = () => {
-    setSortOrder(prevOrder => (prevOrder === 'AZ' ? 'ZA' : 'AZ'));
+  const handleTitleSortToggle = () => {
+    setTitleSortOrder(prevOrder => (prevOrder === 'AZ' ? 'ZA' : 'AZ'));
+  };
+
+  const handleDateSortToggle = () => {
+    setDateSortOrder(prevOrder => (prevOrder === 'Oldest' ? 'Newest' : 'Oldest'));
   };
 
   const getGenreNames = (genreIds: number[]) => {
@@ -117,8 +127,11 @@ const Home: React.FC = () => {
             ))}
           </select>
         </div>
-        <button className='sortAZ' onClick={handleSortToggle}>
-          Sort {sortOrder === 'AZ' ? 'Z-A' : 'A-Z'}
+        <button className='sortAZ' onClick={handleTitleSortToggle}>
+          Sort {titleSortOrder === 'AZ' ? 'Z-A' : 'A-Z'}
+        </button>
+        <button className='sortDate' onClick={handleDateSortToggle}>
+          Sort by Date {dateSortOrder === 'Oldest' ? 'Newest' : 'Oldest'}
         </button>
       </div>
       <div className="podcastList">

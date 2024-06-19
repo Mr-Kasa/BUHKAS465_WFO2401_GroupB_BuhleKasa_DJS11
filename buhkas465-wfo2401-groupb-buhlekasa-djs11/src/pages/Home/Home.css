@@ -44,43 +44,41 @@
   
   .isLoading {
     font-size: xx-large;
-    margin: auto;  /* Center horizontally on all screens */
+    margin: auto;  
     display: flex;
     text-align: center;
   }
-  .controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .genreFilter {
-    display: flex;
-    align-items: center;
-  }
-  
-  .genreFilter label {
-    margin-right: 10px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-  .sortAZ{
-    max-width: 50px;
-  }
-  
+
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.genreFilter {
+  display: flex;
+  align-items: center;
+}
+
+.genreFilter label {
+  margin-right: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 10px; 
+}
+
   @media (min-width: 600px) {
     .podcastList {
       grid-template-columns: 1fr 1fr;
     }
   }
   
-  @media (min-width: 700px) {
-    /* No changes needed for 700px breakpoint */
-  }
+  
   
   @media (min-width: 1000px) {
     .podcastList {

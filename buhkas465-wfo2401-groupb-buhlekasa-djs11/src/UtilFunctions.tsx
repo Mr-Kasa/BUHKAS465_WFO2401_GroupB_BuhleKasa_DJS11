@@ -122,7 +122,6 @@ export function formatDateTime(dateTimeString) {
 
 
 
-
 export const sortPodcastsByTitleAZ = (podcasts: Podcast[]) => {
   return [...podcasts].sort((a, b) => a.title.localeCompare(b.title));
 };
@@ -131,6 +130,13 @@ export const sortPodcastsByTitleZA = (podcasts: Podcast[]) => {
   return [...podcasts].sort((a, b) => b.title.localeCompare(a.title));
 };
 
+export const sortPodcastsByDateOldest = (podcasts: Podcast[]) => {
+  return [...podcasts].sort((a, b) => new Date(a.update).getTime() - new Date(b.update).getTime());
+};
+
+export const sortPodcastsByDateNewest = (podcasts: Podcast[]) => {
+  return [...podcasts].sort((a, b) => new Date(b.update).getTime() - new Date(a.update).getTime());
+};
 
 
 
