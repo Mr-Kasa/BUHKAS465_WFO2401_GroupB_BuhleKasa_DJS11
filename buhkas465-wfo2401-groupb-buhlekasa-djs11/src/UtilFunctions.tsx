@@ -323,7 +323,8 @@ export const useFetchAndSetFavouriteEpisodes = (): Episode[] => {
             seasonImage: season.image,
             file: episode.file,
             isFavourite: false,
-            description: episode.description, // Include description property
+            description: episode.description, 
+            dateFavourited:"",
           }))
         );
 
