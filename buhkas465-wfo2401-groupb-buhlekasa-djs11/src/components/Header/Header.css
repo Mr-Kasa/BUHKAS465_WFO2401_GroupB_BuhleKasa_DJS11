@@ -26,53 +26,53 @@
     }  
 
 }
-
 a {
     text-decoration: none;
-    color:inherit;
-}
-
-.Header {
+    color: inherit;
+  }
+  
+  .Header {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-    text-decoration: none;
+    width: 100%; /* Ensures header spans the full width of its container */
     padding: 1rem;
-}
-
-.icon {
+  }
+  
+  .icon {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-}
-
-.theme-dropdown {
+  }
+  
+  .theme-dropdown {
     display: inline-block;
     margin-right: 10px;
-}
-
-select {
+  }
+  
+  select {
     padding: 5px;
     border-radius: 5px;
     font-size: 16px;
-}
-
-@media (min-width: 710px){
+  }
+  
+  @media (min-width: 710px) {
     .Header {
-        flex-direction: row;
-        font-size: x-large;
-        padding:0px;
+      flex-direction: row; /* Align items horizontally on larger screens */
+      font-size: x-large;
+      padding: 0; /* Remove padding to span the full width */
     }
-    button{
-        min-width: 150%;
+    
+    button {
+      min-width: 150%; /* Adjust button width as needed */
     }
-}
-
-@media (min-width: 1000px){
+  }
+  
+  @media (min-width: 1000px) {
     .Header {
-        font-size: xx-large;
+      font-size: xx-large; /* Further increase font size for larger screens */
     }
-}
+  }
+  

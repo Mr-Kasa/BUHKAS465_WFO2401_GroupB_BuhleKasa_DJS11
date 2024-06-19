@@ -86,7 +86,7 @@ async function fetchShowDetails(showIds: string[]): Promise<Podcast[]> {
           imageUrl: showData.seasons[0].image, // Assuming first season image
           seasons: showData.seasons.length,
           genres: showData.genres,
-          update: showData.updated, // Ensure this matches the correct field from the detailed data response
+          update: showData.updated, 
         };
       })
     );
@@ -98,6 +98,38 @@ async function fetchShowDetails(showIds: string[]): Promise<Podcast[]> {
   }
 }
 
+export function formatDateTime(dateTimeString) {
+  console.log(dateTimeString)
+  // Check if the string is empty or invalid
+  if (!dateTimeString || !Date.parse(dateTimeString)) {
+    console.log("date is an empty string")
+    return ""; // Return an empty string if invalid
+  }
+
+  const date = new Date(dateTimeString);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero for single-digit months
+  const day = String(date.getDate()).padStart(2, '0');
+
+  const hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const adjustedHours = hours % 12 || 12; // Convert to 12-hour format (12 for midnight)
+
+  return `${day}-${month}-${year} ${adjustedHours}:${minutes} ${ampm}`;
+}
+
+
+
+
+export const sortPodcastsByTitleAZ = (podcasts: Podcast[]) => {
+  return [...podcasts].sort((a, b) => a.title.localeCompare(b.title));
+};
+
+export const sortPodcastsByTitleZA = (podcasts: Podcast[]) => {
+  return [...podcasts].sort((a, b) => b.title.localeCompare(a.title));
+};
 
 
 

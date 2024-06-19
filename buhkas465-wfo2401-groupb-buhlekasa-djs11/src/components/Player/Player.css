@@ -1,13 +1,12 @@
-.footer-container{
-    margin-top: 50em;
-    z-index: 10;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    box-shadow: 1px -11px 5px 3px rgba(77, 82, 87, 0.54);
-    -webkit-box-shadow: 1px -11px 5px 3px rgba(194, 216, 201, 0.54);
-    -moz-box-shadow: 1px -11px 5px 3px rgba(200, 221, 207, 0.54);
-  }
+.footer-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10; /* Adjust as needed */
+  box-shadow: 1px -11px 5px 3px rgba(77, 82, 87, 0.54);
+  -webkit-box-shadow: 1px -11px 5px 3px rgba(194, 216, 201, 0.54);
+  -moz-box-shadow: 1px -11px 5px 3px rgba(200, 221, 207, 0.54);
+}
   
   .audio-player {
     display: flex;

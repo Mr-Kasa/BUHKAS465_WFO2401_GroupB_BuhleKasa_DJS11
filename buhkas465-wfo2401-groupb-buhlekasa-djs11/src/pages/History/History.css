@@ -1,6 +1,6 @@
-/* Favourites.css */
+/* History.css */
 
-.favourites-container {
+.history-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,24 +8,45 @@
     width: 100%;
   }
   
-  .favourites-header {
+  .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
     margin-bottom: 1rem;
   }
   
-  .favourites-header h1 {
-    font-size: 2rem;
-    margin: 0;
+  .clear-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #ff4d4d;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 1rem;
   }
   
-  .favourites-list {
+  .clear-button:hover {
+    background-color: #e60000;
+  }
+  
+  .history-header h1 {
+    margin: 0;
+    font-size: 2rem;
+  }
+  
+  .history-list {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+    max-width: 1200px;
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
-    width: 100%;
-    max-width: 1200px;
   }
   
-  .favourites-item {
+  .history-item {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -36,18 +57,19 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
-  .favourites-item img {
+  .episode-image {
     width: 100%;
     max-width: 150px;
     border-radius: 5px;
   }
   
-  .favourites-item h2 {
+  .history-item h3 {
     margin: 1rem 0;
   }
   
-  .favourite-button {
+  .preview-button, .favourite-button {
     padding: 0.5rem 1rem;
+    margin: 0.5rem;
     border: none;
     background-color: #333;
     color: white;
@@ -55,11 +77,11 @@
     border-radius: 5px;
   }
   
-  .favourite-button:hover {
+  .preview-button:hover, .favourite-button:hover {
     background-color: #555;
   }
   
-  .no-favourites {
+  .no-history {
     font-size: 1.2rem;
     color: #666;
   }

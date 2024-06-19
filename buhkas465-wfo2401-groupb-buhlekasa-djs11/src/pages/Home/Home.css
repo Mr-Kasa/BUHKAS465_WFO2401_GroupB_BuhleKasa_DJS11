@@ -1,25 +1,29 @@
-:root {
+/* Home.css */
+
+
+  
+  .HomePagePodcasts {
+    display: flex;
+    flex-direction: column; /* Stack filter and podcast list vertically */
+  }
+  
+  .genreFilter {
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
-}
-
-.HomePagePodcasts {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.podcastList {
+    width: 100%;  /* Occupy full width */
+    margin-bottom: 1rem; /* Add some spacing after filter */
+  }
+  
+  .podcastList {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Adjust columns as needed for larger screens */
     gap: 2rem;
     width: 100%;
     padding: 1rem;
-}
-
-.podcast-tile {
+  }
+  
+  .podcast-tile {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -31,41 +35,56 @@
     -webkit-box-shadow: 10px 10px 25px 0px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 10px 10px 25px 0px rgba(0, 0, 0, 0.75);
     overflow: hidden;
-}
-
-img {
+  }
+  
+  img {
     width: 100%;
     border-radius: 15px 15px 0px 0px;
-}
-
-.isLoading{
+  }
+  
+  .isLoading {
     font-size: xx-large;
-    margin-left: 30%;
+    margin: auto;  /* Center horizontally on all screens */
     display: flex;
     text-align: center;
-}
-
-@media (min-width: 600px) {
+  }
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .genreFilter {
+    display: flex;
+    align-items: center;
+  }
+  
+  .genreFilter label {
+    margin-right: 10px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  .sortAZ{
+    max-width: 50px;
+  }
+  
+  @media (min-width: 600px) {
     .podcastList {
-        grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
     }
-}
-@media (min-width: 700px) {
-    .isLoading{
-    
-        margin-left: 85%;
-      
-    }
-}
-
-
-@media (min-width: 1000px) {
+  }
+  
+  @media (min-width: 700px) {
+    /* No changes needed for 700px breakpoint */
+  }
+  
+  @media (min-width: 1000px) {
     .podcastList {
-        grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
     }
-    .isLoading{
-    
-        margin-left: 140%;
-      
-    }
-}
+  }
+  

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import "./History.css";
 
 export default function History() {
   const [history, setHistory] = useState([]);
@@ -68,22 +69,22 @@ export default function History() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   return (
-    <div>
-      <div>
-        <button onClick={clearHistory}>Clear History</button>
+    <div className="history-container">
+      <div className="history-header">
+        <button className="clear-button" onClick={clearHistory}>Clear History</button>
         <h1>History List</h1>
       </div>
       {noHistory ? (
-        <p>No history items found.</p>
+        <p className="no-history">No history items found.</p>
       ) : (
-        <ul>
+        <ul className="history-list">
           {history.map((episode) => (
-            <li key={episode.episodeId}>
-              <img src={episode.seasonImage} alt={episode.episodeTitle} />
+            <li className="history-item" key={episode.episodeId}>
+              <img src={episode.seasonImage} alt={episode.episodeTitle} className="episode-image" />
               <h3>{episode.episodeTitle}</h3>
               <p>Last played: {new Date(episode.playedAt).toLocaleString()}</p>
               <Link
@@ -92,9 +93,9 @@ export default function History() {
                   state: { season: episode }
                 }}
               >
-                <button>Preview</button>
+                <button className="preview-button">Preview</button>
               </Link>
-              <button onClick={() => toggleFavourite(episode)}>
+              <button className="favourite-button" onClick={() => toggleFavourite(episode)}>
                 {episode.isFavourite ? 'Unfavourite' : 'Favourite'}
               </button>
             </li>
@@ -104,5 +105,3 @@ export default function History() {
     </div>
   );
 }
-
-
