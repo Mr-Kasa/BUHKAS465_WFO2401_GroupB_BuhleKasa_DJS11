@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './Favourite.css';
 import {
-  sortPodcastsByTitleAZ,
-  sortPodcastsByTitleZA,
-  sortPodcastsByDateOldest,
-  sortPodcastsByDateNewest,
+  sortEpisodesByTitleAZ,
+  sortEpisodesByTitleZA,
+  sortEpisodesByDateOldest,
+  sortEpisodesByDateNewest,
   getCurrentDateTime
 } from '../../UtilFunctions';
 
@@ -29,12 +29,14 @@ const Favourites = () => {
   const [sortBy, setSortBy] = useState('');
 
   useEffect(() => {
-    setTimeout(() => {
-      const storedEpisodes = getEpisodesFromLocalStorage();
-      setEpisodes(storedEpisodes);
-      setLoading(false);
-    }, 0); // Removed the delay
+    const storedEpisodes = getEpisodesFromLocalStorage();
+    setEpisodes(storedEpisodes);
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    console.log('Episodes updated:', episodes);
+  }, [episodes]);
 
   const toggleFavourite = (episode) => {
     const updatedEpisodes = episodes.map((ep) => {
@@ -55,11 +57,13 @@ const Favourites = () => {
 
   const handleSortAZ = () => {
     if (sortBy !== 'AZ') {
-      const sortedEpisodes = sortPodcastsByTitleAZ(episodes);
+      const sortedEpisodes = sortEpisodesByTitleAZ([...episodes]); // Create a copy of episodes
+      console.log('Sorting A-Z:', sortedEpisodes);
       setEpisodes(sortedEpisodes);
       setSortBy('AZ');
     } else {
-      const sortedEpisodes = sortPodcastsByTitleZA(episodes);
+      const sortedEpisodes = sortEpisodesByTitleZA([...episodes]); // Create a copy of episodes
+      console.log('Sorting Z-A:', sortedEpisodes);
       setEpisodes(sortedEpisodes);
       setSortBy('ZA');
     }
@@ -67,17 +71,21 @@ const Favourites = () => {
 
   const handleSortNewest = () => {
     if (sortBy !== 'Newest') {
-      const sortedEpisodes = sortPodcastsByDateNewest(episodes);
+      const sortedEpisodes = sortEpisodesByDateNewest([...episodes]); // Create a copy of episodes
+      console.log('Sorting Newest:', sortedEpisodes);
       setEpisodes(sortedEpisodes);
       setSortBy('Newest');
     } else {
-      const sortedEpisodes = sortPodcastsByDateOldest(episodes);
+      const sortedEpisodes = sortEpisodesByDateOldest([...episodes]); // Create a copy of episodes
+      console.log('Sorting Oldest:', sortedEpisodes);
       setEpisodes(sortedEpisodes);
       setSortBy('Oldest');
     }
   };
 
   const favouriteEpisodes = episodes.filter(ep => ep.isFavourite);
+
+  console.log('Render: favouriteEpisodes', favouriteEpisodes);
 
   return (
     <div className="favourites-container">
@@ -118,4 +126,3 @@ const Favourites = () => {
 };
 
 export default Favourites;
-

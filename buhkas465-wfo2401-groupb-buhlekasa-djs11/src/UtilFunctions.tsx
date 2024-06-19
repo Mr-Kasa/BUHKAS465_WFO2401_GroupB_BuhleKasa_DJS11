@@ -146,12 +146,6 @@ export const sortPodcastsByDateNewest = (podcasts: Podcast[]) => {
 
 
 
-
-
-
-
-
-
 export interface Podcast {
   id: string;
   title: string;
@@ -230,18 +224,53 @@ export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
   }
   
 };
+// UtilFunctions.js
 
+export const getCurrentDateTime = () => {
+  const currentDate = new Date();
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  };
+  return currentDate.toLocaleDateString('en-US', options);
+};
 
+export const sortEpisodesByTitleAZ = (episodes) => {
+  return [...episodes].sort((a, b) => a.episodeTitle.localeCompare(b.episodeTitle));
+};
 
+export const sortEpisodesByTitleZA = (episodes) => {
+  return [...episodes].sort((a, b) => b.episodeTitle.localeCompare(a.episodeTitle));
+};
 
+export const sortEpisodesByDateOldest = (episodes) => {
+  return [...episodes].sort((a, b) => {
+    const dateA = parseFavouritedDate(a.dateFavourited);
+    const dateB = parseFavouritedDate(b.dateFavourited);
+    return dateA.getTime() - dateB.getTime();
+  });
+};
 
+export const sortEpisodesByDateNewest = (episodes) => {
+  return [...episodes].sort((a, b) => {
+    const dateA = parseFavouritedDate(b.dateFavourited);
+    const dateB = parseFavouritedDate(a.dateFavourited);
+    return dateA.getTime() - dateB.getTime();
+  });
+};
 
-
-
-
-
-
-
+const parseFavouritedDate = (dateString) => {
+  // Example: "June 19, 2024 at 4:51 PM"
+  const [, month, day, year, time] = dateString.match(/(\w+) (\d+), (\d+) at (.+)/);
+  const [hourMinute, ampm] = time.split(' ');
+  let [hour, minute] = hourMinute.split(':');
+  hour = ampm === 'PM' ? parseInt(hour, 10) + 12 : parseInt(hour, 10); // Convert PM hours to 24-hour format
+  return new Date(year, month - 1, day, hour, parseInt(minute, 10));
+};
 
 
 
@@ -356,16 +385,3 @@ export const useFetchAndSetFavouriteEpisodes = (): Episode[] => {
   return favouriteEpisodes;
 };
 
-
-export const getCurrentDateTime = () => {
-  const now = new Date();
-  const options = {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric'
-  };
-  return now.toLocaleString('en-US', options);
-};
