@@ -1,9 +1,4 @@
 
-.seasonBackground{
-    padding: 1rem;
-    margin: 2rem;
-   border-radius: 15px;
-}
 
 .light{
     .seasonBackground{
@@ -16,10 +11,15 @@
         background-color:rgb(1, 102, 102);
     }
 }
-.seasonImg{
-    border-radius: inherit;
+.seasonImage{
+    border-radius: 0;
 }
-
+.seasonBackground {
+    padding: 1rem;
+    margin: 1em; 
+    border-radius: 15px;
+    aspect-ratio: 1 / 2;
+}
 @media(min-width:700px){
     .seasonsContainer{
         display:grid;

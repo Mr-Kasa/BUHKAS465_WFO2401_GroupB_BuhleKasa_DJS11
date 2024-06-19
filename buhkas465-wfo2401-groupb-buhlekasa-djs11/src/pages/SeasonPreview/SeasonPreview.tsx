@@ -28,15 +28,15 @@ const SeasonPreview: React.FC = () => {
       <h2>Seasons</h2>
       <div className='seasonsContainer'>
       {seasons.map((season) => (
+       <Link to={`/show/${id}/seasons/${season.season}/episodes`} state={{ season }}>
         <div key={season.season} className='seasonBackground'>
           <h3>
-            <Link to={`/show/${id}/seasons/${season.season}/episodes`} state={{ season }}>
               {season.title}
-            </Link>
           </h3>
-          <img src={season.image} alt={season.title} />
+          <img className='seasonImage' src={season.image} alt={season.title} />
           <p>{season.episodes.length} episodes</p>
         </div>
+        </Link>
       ))}
       </div>
     </div>
