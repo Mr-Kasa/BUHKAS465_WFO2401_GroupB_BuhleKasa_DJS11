@@ -13,6 +13,16 @@ const getEpisodesFromLocalStorage = () => {
   return episodes ? JSON.parse(episodes) : [];
 };
 
+const getEpisodeNumber = (episodeId) => {
+  const parts = episodeId.split('-');
+  return parts[parts.length - 1];
+};
+
+const getSeasonNumber = (episodeId) => {
+  const parts = episodeId.split('-');
+  return parts[parts.length - 2];
+};
+
 const Favourites = () => {
   const [episodes, setEpisodes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +33,7 @@ const Favourites = () => {
       const storedEpisodes = getEpisodesFromLocalStorage();
       setEpisodes(storedEpisodes);
       setLoading(false);
-    }, 1000);
+    }, 0); // Removed the delay
   }, []);
 
   const toggleFavourite = (episode) => {
@@ -91,6 +101,8 @@ const Favourites = () => {
               <img src={storedEpisode.seasonImage} alt={storedEpisode.episodeTitle} />
               <h2>{storedEpisode.episodeTitle}</h2>
               <p>{`Show: ${storedEpisode.showTitle}`}</p>
+              <p>{`Episode: ${getEpisodeNumber(storedEpisode.episodeId)}`}</p>
+              <p>{`Season: ${getSeasonNumber(storedEpisode.episodeId)}`}</p>
               <p>{`Favourited On: ${storedEpisode.dateFavourited}`}</p>
               <button className="favourite-button" onClick={() => toggleFavourite(storedEpisode)}>
                 {storedEpisode.isFavourite ? '❤️' : '♡'}
@@ -106,3 +118,4 @@ const Favourites = () => {
 };
 
 export default Favourites;
+

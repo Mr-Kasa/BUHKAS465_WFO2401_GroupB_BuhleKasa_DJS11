@@ -9,6 +9,12 @@ const getEpisodeNumber = (episodeId) => {
   return parts[parts.length - 1];
 };
 
+// Function to extract season number from episodeId
+const getSeasonNumber = (episodeId) => {
+  const parts = episodeId.split('-');
+  return parts[parts.length - 2];
+};
+
 export default function History() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -99,8 +105,9 @@ export default function History() {
             <li className="history-item" key={episode.episodeId}>
               <img src={episode.seasonImage} alt={episode.episodeTitle} className="episode-image" />
               <h3>{episode.episodeTitle}</h3> {/* Display the episode title */}
-              <p>{`Show: ${episode.showTitle}`}</p> {/* Display the show title */}
+              <h3>{episode.showTitle}</h3> {/* Display the show title */}
               <p>{`EP - ${getEpisodeNumber(episode.episodeId)}`}</p> {/* Display the episode number */}
+              <p>{`Season - ${getSeasonNumber(episode.episodeId)}`}</p> {/* Display the season number */}
               <p>Last played: {new Date(episode.playedAt).toLocaleString()}</p>
               <Link
                 to={{
@@ -120,3 +127,5 @@ export default function History() {
     </div>
   );
 }
+
+
