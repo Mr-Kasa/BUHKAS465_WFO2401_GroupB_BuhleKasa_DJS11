@@ -23,6 +23,97 @@ export async function fetchAllPodcasts() {
 
 
 
+
+export async function fetchShowsByGenre(genreId: string): Promise<Podcast[]> {
+  const baseUrl = 'https://podcast-api.netlify.app';
+  const url = genreId ? `${baseUrl}/genre/${genreId}` : baseUrl;
+
+  console.log(`${genreId} in Utilfunctions`);
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    console.log('Fetched data:', data);
+
+    if (genreId && data.hasOwnProperty('shows')) {
+      const showIds = data.shows;  // Assuming 'shows' is an array of show IDs
+      console.log('Show IDs:', showIds);
+
+      const showDetails = await fetchShowDetails(showIds);
+      console.log('Show details:', showDetails);
+
+      return showDetails;
+    } else if (Array.isArray(data)) {
+      // If no genreId is provided, return the base data which is the list of shows
+      return data.map((show: any) => ({
+        id: show.id,
+        title: show.title,
+        imageUrl: show.image, // Ensure this matches the correct field from the base data response
+        seasons: show.seasons,
+        genres: show.genres,
+        update: show.updated, // Ensure this matches the correct field from the base data response
+      }));
+    } else {
+      throw new Error('Invalid response structure');
+    }
+  } catch (error) {
+    console.error('Error fetching shows by genre:', error);
+    throw error;  // Re-throw the error after logging it
+  }
+}
+
+async function fetchShowDetails(showIds: string[]): Promise<Podcast[]> {
+  try {
+    const showDetails = await Promise.all(
+      showIds.map(async (id) => {
+        const url = `https://podcast-api.netlify.app/id/${id}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch show with id ${id}`);
+        }
+
+        const showData = await response.json();
+        console.log(`Fetched show data for id ${id}:`, showData);
+
+        return {
+          id: showData.id,
+          title: showData.title,
+          imageUrl: showData.seasons[0].image, // Assuming first season image
+          seasons: showData.seasons.length,
+          genres: showData.genres,
+          update: showData.updated, // Ensure this matches the correct field from the detailed data response
+        };
+      })
+    );
+
+    return showDetails;
+  } catch (error) {
+    console.error('Error fetching show details:', error);
+    throw error;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export interface Podcast {
   id: string;
   title: string;
@@ -30,17 +121,15 @@ export interface Podcast {
   seasons: number;
 }
 
-export function sortByTitleAlphabetically(podcasts: Podcast[]): Podcast[] {
-  return podcasts.sort((a, b) => {
-    if (a.title.toLowerCase() < b.title.toLowerCase()) {
-      return -1;
-    }
-    if (a.title.toLowerCase() > b.title.toLowerCase()) {
-      return 1;
+export const sortByTitleAlphabetically = (podcasts: Podcast[]): Podcast[] => {
+  return podcasts.filter(podcast => podcast.title).sort((a, b) => {
+    if (a.title && b.title) {
+      return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
     }
     return 0;
   });
-}
+};
+
 
 
 export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
