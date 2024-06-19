@@ -1,3 +1,35 @@
-body{
-    margin-bottom: 15rem;
+
+.seasonBackground{
+    padding: 1rem;
+    margin: 2rem;
+   border-radius: 15px;
+}
+
+.light{
+    .seasonBackground{
+        background-color:rgb(243, 238, 169);
+    }
+}
+
+.dark{
+    .seasonBackground{
+        background-color:rgb(1, 102, 102);
+    }
+}
+.seasonImg{
+    border-radius: inherit;
+}
+
+@media(min-width:700px){
+    .seasonsContainer{
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media(min-width:1000px){
+    .seasonsContainer{
+        display:grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
 }

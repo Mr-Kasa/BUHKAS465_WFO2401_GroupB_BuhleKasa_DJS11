@@ -1,3 +1,36 @@
 body{
     margin-bottom:10rem;
+    text-align: center
+}
+
+.SeasonTiles{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin:1rem;
+    border-radius: 10px 10px 0px 0px ;
+}
+
+.GoToSeasons{
+   color: coral;
+}
+
+.GoToSeasons :hover{
+    color:rgb(0, 189, 16);
+}
+
+.light{
+    .SeasonTiles{
+        background-color:rgb(243, 238, 169);
+    }
+}
+
+.dark{
+    .SeasonTiles{
+        background-color:rgb(1, 102, 102);
+    }
+}
+.seasonImg{
+    border-radius: inherit;
 }

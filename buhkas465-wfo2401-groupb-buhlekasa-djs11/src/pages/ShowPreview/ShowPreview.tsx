@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import "./ShowPreview.css"
+import "./ShowPreview.css";
 
 interface Episode {
   title: string;
@@ -48,22 +48,29 @@ const ShowPreview: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  const seasonsWithEpisodeCount = podcast.seasons.map(season => ({
+    ...season,
+    numberOfEpisodes: season.episodes.length
+  }));
+
   return (
-    <div>
-      <img src={podcast.seasons[0]?.image || ''} alt={podcast.title} />
-      <h1>{podcast.title}</h1>
-      <p>Description: {podcast.description}</p>
-      <div>
-        <Link to={`/show/${id}/seasons`} state={{ seasons: podcast.seasons }}>
+    <div className='SeasonTiles'>
+      <img className='seasonImg' src={podcast.seasons[0]?.image || ''} alt={podcast.title} />
+      <div className='ShowInfo'>
+        <h1>{podcast.title}</h1>
+        <p>Description: {podcast.description}</p>
+        <div>
           <h3>Seasons: {podcast.seasons.length}</h3>
-        </Link>
+          <Link className='GoToSeasons' to={`/show/${id}/seasons`} state={{ seasons: seasonsWithEpisodeCount, showTitle: podcast.title }}>
+            <h2>Go to seasons</h2>
+          </Link>
+        </div>
       </div>
     </div>
   );
 };
 
 export default ShowPreview;
-
 
 
 
