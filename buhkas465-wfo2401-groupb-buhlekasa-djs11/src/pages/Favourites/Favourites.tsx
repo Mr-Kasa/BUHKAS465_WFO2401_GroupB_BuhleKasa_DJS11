@@ -5,7 +5,8 @@ import {
   sortPodcastsByTitleZA,
   sortPodcastsByDateOldest,
   sortPodcastsByDateNewest,
-} from '../../UtilFunctions'
+  getCurrentDateTime
+} from '../../UtilFunctions';
 
 const getEpisodesFromLocalStorage = () => {
   const episodes = localStorage.getItem('episodes');
@@ -15,7 +16,7 @@ const getEpisodesFromLocalStorage = () => {
 const Favourites = () => {
   const [episodes, setEpisodes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState(''); // State to track current sorting method
+  const [sortBy, setSortBy] = useState('');
 
   useEffect(() => {
     setTimeout(() => {
@@ -28,7 +29,11 @@ const Favourites = () => {
   const toggleFavourite = (episode) => {
     const updatedEpisodes = episodes.map((ep) => {
       if (ep.episodeId === episode.episodeId) {
-        const updatedEpisode = { ...ep, isFavourite: !ep.isFavourite };
+        const updatedEpisode = {
+          ...ep,
+          isFavourite: !ep.isFavourite,
+          dateFavourited: !ep.isFavourite ? getCurrentDateTime() : ""
+        };
         return updatedEpisode;
       }
       return ep;
@@ -85,8 +90,10 @@ const Favourites = () => {
             <div className="favourites-item" key={storedEpisode.episodeId}>
               <img src={storedEpisode.seasonImage} alt={storedEpisode.episodeTitle} />
               <h2>{storedEpisode.episodeTitle}</h2>
+              <p>{`Show: ${storedEpisode.showTitle}`}</p>
+              <p>{`Favourited On: ${storedEpisode.dateFavourited}`}</p>
               <button className="favourite-button" onClick={() => toggleFavourite(storedEpisode)}>
-                {storedEpisode.isFavourite ? 'Unfavourite' : 'Favourite'}
+                {storedEpisode.isFavourite ? '❤️' : '♡'}
               </button>
             </div>
           ))}

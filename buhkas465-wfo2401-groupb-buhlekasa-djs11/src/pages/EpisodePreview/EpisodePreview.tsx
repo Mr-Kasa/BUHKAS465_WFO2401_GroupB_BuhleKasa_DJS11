@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { EpisodeContext } from '../../components/Player/EpisodeContext';
 import { Episode, Season } from '../../types';
+import { getCurrentDateTime } from '../../UtilFunctions';
 import "./episodePreview.css"
 
 
@@ -22,8 +23,8 @@ const EpisodePreview: React.FC = () => {
     setCurrentEpisode(episode);
   };
 
-  const findEpisodeId = ( episodeDescription: string): string | null => {
-    console.log('Searching for episode with values:', {  episodeDescription });
+  const findEpisodeId = (episodeDescription: string): string | null => {
+    console.log('Searching for episode with values:', { episodeDescription });
   
     try {
       const episodes = JSON.parse(localStorage.getItem('episodes')) || [];
@@ -35,7 +36,6 @@ const EpisodePreview: React.FC = () => {
   
       const matchingEpisode = episodes.find(
         (episode: { description: string }) =>
-          
           episode.description === episodeDescription
       );
   
@@ -53,7 +53,7 @@ const EpisodePreview: React.FC = () => {
   };
   
   const handleEpisodeClick = (episode: Episode) => {
-    const episodeId = findEpisodeId( episode.description);
+    const episodeId = findEpisodeId(episode.description);
     if (episodeId) {
       console.log('Episode ID found:', episodeId);
       // Perform actions with the episode ID, like storing playback history
@@ -64,7 +64,11 @@ const EpisodePreview: React.FC = () => {
   const toggleFavourite = (episode: Episode) => {
     const updatedEpisodes = episodes.map((ep) => {
       if (ep.episodeId === episode.episodeId) {
-        const updatedEpisode = { ...ep, isFavourite: !ep.isFavourite };
+        const updatedEpisode = {
+          ...ep,
+          isFavourite: !ep.isFavourite,
+          dateFavourited: !ep.isFavourite ? getCurrentDateTime() : ""
+        };
         console.log('Favourites clicked');
         console.log('Updated Episode:', updatedEpisode);
         return updatedEpisode;
@@ -73,6 +77,7 @@ const EpisodePreview: React.FC = () => {
     });
 
     setEpisodes(updatedEpisodes);
+    localStorage.setItem('episodes', JSON.stringify(updatedEpisodes));
     const currentEpisode = updatedEpisodes.find(ep => ep.episodeId === episode.episodeId);
     console.log('Current Episode:', currentEpisode);
   };

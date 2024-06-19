@@ -355,3 +355,17 @@ export const useFetchAndSetFavouriteEpisodes = (): Episode[] => {
 
   return favouriteEpisodes;
 };
+
+
+export const getCurrentDateTime = () => {
+  const now = new Date();
+  const options = {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  };
+  return now.toLocaleString('en-US', options);
+};

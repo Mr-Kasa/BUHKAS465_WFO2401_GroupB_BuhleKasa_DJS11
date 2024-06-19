@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { getCurrentDateTime } from '../../UtilFunctions';
 import "./History.css";
+
+// Function to extract episode number from episodeId
+const getEpisodeNumber = (episodeId) => {
+  const parts = episodeId.split('-');
+  return parts[parts.length - 1];
+};
 
 export default function History() {
   const [history, setHistory] = useState([]);
@@ -8,27 +15,25 @@ export default function History() {
   const [noHistory, setNoHistory] = useState(false);
 
   useEffect(() => {
-    // Simulate a delay to fetch history data
-    setTimeout(() => {
-      const storedHistory = JSON.parse(localStorage.getItem('history')) || [];
-      const storedEpisodes = JSON.parse(localStorage.getItem('episodes')) || [];
+    const storedHistory = JSON.parse(localStorage.getItem('history')) || [];
+    const storedEpisodes = JSON.parse(localStorage.getItem('episodes')) || [];
 
-      const updatedHistory = storedHistory.map(episode => {
-        const matchingEpisode = storedEpisodes.find(ep => ep.episodeId === episode.episodeId);
-        if (matchingEpisode) {
-          return {
-            ...episode,
-            seasonImage: matchingEpisode.seasonImage, // Get only the season image
-            isFavourite: matchingEpisode.isFavourite // Get isFavourite status
-          };
-        }
-        return episode;
-      });
+    const updatedHistory = storedHistory.map(episode => {
+      const matchingEpisode = storedEpisodes.find(ep => ep.episodeId === episode.episodeId);
+      if (matchingEpisode) {
+        return {
+          ...episode,
+          seasonImage: matchingEpisode.seasonImage, // Get only the season image
+          isFavourite: matchingEpisode.isFavourite, // Get isFavourite status
+          showTitle: matchingEpisode.showTitle // Get the show title
+        };
+      }
+      return episode;
+    });
 
-      setHistory(updatedHistory);
-      setLoading(false);
-      setNoHistory(updatedHistory.length === 0);
-    }, 1000); // Adjust the delay as needed
+    setHistory(updatedHistory);
+    setLoading(false);
+    setNoHistory(updatedHistory.length === 0);
   }, []);
 
   useEffect(() => {
@@ -51,7 +56,11 @@ export default function History() {
 
     const updatedEpisodes = storedEpisodes.map((ep) => {
       if (ep.episodeId === episode.episodeId) {
-        return { ...ep, isFavourite: !ep.isFavourite };
+        return { 
+          ...ep, 
+          isFavourite: !ep.isFavourite,
+          dateFavourited: !ep.isFavourite ? getCurrentDateTime() : "" 
+        };
       }
       return ep;
     });
@@ -60,7 +69,11 @@ export default function History() {
 
     const updatedHistory = history.map((ep) => {
       if (ep.episodeId === episode.episodeId) {
-        return { ...ep, isFavourite: !ep.isFavourite };
+        return { 
+          ...ep, 
+          isFavourite: !ep.isFavourite,
+          dateFavourited: !ep.isFavourite ? getCurrentDateTime() : "" 
+        };
       }
       return ep;
     });
@@ -85,7 +98,9 @@ export default function History() {
           {history.map((episode) => (
             <li className="history-item" key={episode.episodeId}>
               <img src={episode.seasonImage} alt={episode.episodeTitle} className="episode-image" />
-              <h3>{episode.episodeTitle}</h3>
+              <h3>{episode.episodeTitle}</h3> {/* Display the episode title */}
+              <p>{`Show: ${episode.showTitle}`}</p> {/* Display the show title */}
+              <p>{`EP - ${getEpisodeNumber(episode.episodeId)}`}</p> {/* Display the episode number */}
               <p>Last played: {new Date(episode.playedAt).toLocaleString()}</p>
               <Link
                 to={{
@@ -96,7 +111,7 @@ export default function History() {
                 <button className="preview-button">Preview</button>
               </Link>
               <button className="favourite-button" onClick={() => toggleFavourite(episode)}>
-                {episode.isFavourite ? 'Unfavourite' : 'Favourite'}
+                {episode.isFavourite ? '❤️' : '♡'}
               </button>
             </li>
           ))}
