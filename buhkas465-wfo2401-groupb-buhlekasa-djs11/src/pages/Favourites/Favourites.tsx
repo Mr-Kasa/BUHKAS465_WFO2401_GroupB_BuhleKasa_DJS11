@@ -23,21 +23,32 @@ const getSeasonNumber = (episodeId) => {
   return parts[parts.length - 2];
 };
 
+const sortEpisodesByEpisodeId = (episodes) => {
+  try {
+    // Sorting function by episodeId
+    const sortedEpisodes = episodes.sort((a, b) => {
+      return a.episodeId.localeCompare(b.episodeId);
+    });
+    console.log('Sorted episodes by episodeId:', sortedEpisodes.map(ep => ep.episodeId));
+    return sortedEpisodes;
+  } catch (error) {
+    console.error('Error sorting episodes by episodeId:', error);
+    return episodes; // Return unsorted episodes in case of error
+  }
+};
+
 const Favourites = () => {
   const [episodes, setEpisodes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortByTitle, setSortByTitle] = useState('AZ');
-  const [sortByDate, setSortByDate] = useState(null);
+  const [sortByTitle, setSortByTitle] = useState(null); // null means no sorting
+  const [sortByDate, setSortByDate] = useState(null); // null means no sorting
 
   useEffect(() => {
     const storedEpisodes = getEpisodesFromLocalStorage();
-    setEpisodes(storedEpisodes);
+    const sortedEpisodes = sortEpisodesByEpisodeId([...storedEpisodes]);
+    setEpisodes(sortedEpisodes);
     setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    console.log('Episodes updated:', episodes);
-  }, [episodes]);
+  }, []); // Empty dependency array ensures this effect runs only once on mount
 
   const toggleFavourite = (episode) => {
     const updatedEpisodes = episodes.map((ep) => {
@@ -57,43 +68,38 @@ const Favourites = () => {
   };
 
   const handleSortTitle = () => {
-    if (episodes.length > 0) {
-      console.log('Sorting by title:', sortByTitle);
-      if (sortByTitle === 'AZ') {
-        const sortedEpisodes = sortEpisodesByTitleZA([...episodes]); // Create a copy of episodes
-        setEpisodes(sortedEpisodes);
-        setSortByTitle('ZA');
-      } else {
-        const sortedEpisodes = sortEpisodesByTitleAZ([...episodes]); // Create a copy of episodes
-        setEpisodes(sortedEpisodes);
-        setSortByTitle('AZ');
-      }
-      setSortByDate(null); // Deactivate date sorting
+    let sortedEpisodes;
+    if (sortByTitle === 'AZ') {
+      sortedEpisodes = sortEpisodesByTitleZA([...episodes]);
+      setSortByTitle('ZA');
+    } else {
+      sortedEpisodes = sortEpisodesByTitleAZ([...episodes]);
+      setSortByTitle('AZ');
     }
+    setEpisodes(sortedEpisodes);
+    setSortByDate(null); // Deactivate date sorting
   };
 
   const handleSortDate = () => {
-    if (episodes.length > 0) {
-      console.log('Sorting by date:', sortByDate);
-      console.log('Episodes before sorting by date:', episodes);
-      if (sortByDate === 'Newest') {
-        const sortedEpisodes = sortEpisodesByDateOldest([...episodes]); // Create a copy of episodes
-        console.log('Sorted episodes (Oldest):', sortedEpisodes);
-        setEpisodes(sortedEpisodes);
-        setSortByDate('Oldest');
-      } else {
-        const sortedEpisodes = sortEpisodesByDateNewest([...episodes]); // Create a copy of episodes
-        console.log('Sorted episodes (Newest):', sortedEpisodes);
-        setEpisodes(sortedEpisodes);
-        setSortByDate('Newest');
-      }
-      setSortByTitle(null); // Deactivate title sorting
+    let sortedEpisodes;
+    if (sortByDate === 'Newest') {
+      sortedEpisodes = sortEpisodesByDateOldest([...episodes]);
+      setSortByDate('Oldest');
+    } else {
+      sortedEpisodes = sortEpisodesByDateNewest([...episodes]);
+      setSortByDate('Newest');
     }
+    setEpisodes(sortedEpisodes);
+    setSortByTitle(null); // Deactivate title sorting
   };
 
-  const favouriteEpisodes = episodes.filter(ep => ep.isFavourite);
+  useEffect(() => {
+    // Log episodeIds of favourite episodes after any sorting
+    const favouriteSortedIds = episodes.filter(ep => ep.isFavourite).map(ep => ep.episodeId);
+    console.log('Favourite episodes sorted:', favouriteSortedIds);
+  }, [episodes]); // Effect runs whenever episodes state changes
 
-  console.log('Render: favouriteEpisodes', favouriteEpisodes);
+  const favouriteEpisodes = episodes.filter(ep => ep.isFavourite);
 
   return (
     <div className="favourites-container">
@@ -101,10 +107,10 @@ const Favourites = () => {
         <h1>Favourite Episodes</h1>
         <div className="sort-buttons">
           <button onClick={handleSortTitle}>
-            {sortByTitle === 'AZ' ? 'Sort A-Z' : 'Sort Z-A'}
+            {sortByTitle === 'AZ' ? 'Sort A-Z by Title' : 'Sort Z-A by Title'}
           </button>
           <button onClick={handleSortDate}>
-            {sortByDate === 'Newest' ? 'Sort Newest-Oldest' : 'Sort Oldest-Newest'}
+            {sortByDate === 'Newest' ? 'Sort Newest-Oldest by Date' : 'Sort Oldest-Newest by Date'}
           </button>
         </div>
       </div>
@@ -134,3 +140,4 @@ const Favourites = () => {
 };
 
 export default Favourites;
+
