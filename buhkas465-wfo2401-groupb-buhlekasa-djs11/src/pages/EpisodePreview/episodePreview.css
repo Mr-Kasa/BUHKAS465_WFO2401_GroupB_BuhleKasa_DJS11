@@ -2,6 +2,9 @@ body{
     align-items: center;
     margin: 0;
 }
+.episodeLayout{
+    padding-bottom: 13rem;
+}
 
 .favoutiteButton{
     background-color: transparent;

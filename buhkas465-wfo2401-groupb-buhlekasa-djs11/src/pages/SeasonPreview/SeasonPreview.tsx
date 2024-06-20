@@ -23,7 +23,7 @@ const SeasonPreview: React.FC = () => {
   const { seasons, showTitle } = location.state as { seasons: Season[], showTitle: string };
 
   return (
-    <div>
+    <div className='seasons'>
       <h1>{showTitle}</h1>
       <h2>Seasons</h2>
       <div className='seasonsContainer'>

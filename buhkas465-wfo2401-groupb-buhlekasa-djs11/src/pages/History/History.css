@@ -7,6 +7,7 @@
     width: 100%;
     padding-left: 1rem;
     padding-top: 2rem;
+    padding-bottom: 15rem;
   }
   
   .history-header {
@@ -45,6 +46,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
+    padding-bottom: 10rem;
   }
   
   .history-item {

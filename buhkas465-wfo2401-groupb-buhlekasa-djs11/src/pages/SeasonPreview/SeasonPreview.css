@@ -11,6 +11,9 @@
         background-color:rgb(1, 102, 102);
     }
 }
+.seasons{
+    padding-bottom: 20rem;
+}
 .seasonImage{
     border-radius: 0;
 }

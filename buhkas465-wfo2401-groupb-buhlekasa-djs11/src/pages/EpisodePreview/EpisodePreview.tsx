@@ -83,7 +83,7 @@ const EpisodePreview: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className='episodeLayout'>
       <h1>{season.title}</h1>
       <div className='EpisodesContainer'>
       <img className='seasonImg' src={season.image} alt={season.title} />
