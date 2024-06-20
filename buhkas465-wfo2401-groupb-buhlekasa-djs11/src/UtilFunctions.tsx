@@ -223,7 +223,7 @@ export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
     let history = JSON.parse(localStorage.getItem('history')) || [];
     history.push(playedEpisode);
     localStorage.setItem('history', JSON.stringify(history));
-    // Success message can be removed if desired for a truly clean console
+   
     // console.log('Played episode stored successfully in history:', playedEpisode);
   } catch (error) {
     console.error('Error storing played episode in history:', error);
@@ -299,14 +299,6 @@ export const getCurrentDateTime = () => {
 
 
 
-const parseFavouritedDate = (dateString) => {
-  // Example: "June 19, 2024 at 4:51 PM"
-  const [, month, day, year, time] = dateString.match(/(\w+) (\d+), (\d+) at (.+)/);
-  const [hourMinute, ampm] = time.split(' ');
-  let [hour, minute] = hourMinute.split(':');
-  hour = ampm === 'PM' ? parseInt(hour, 10) + 12 : parseInt(hour, 10); // Convert PM hours to 24-hour format
-  return new Date(year, month - 1, day, hour, parseInt(minute, 10));
-};
 
 
 

@@ -12,8 +12,8 @@ import EpisodePreview from './pages/EpisodePreview/EpisodePreview';
 
 function App() {
   
-  const showData = { id: 'show_id', title: 'Show Title' };
-  const seasonData = { id: 'season_id', imageUrl: 'season_image_url', number: 1 };
+  const showData = { id: '', title: '' };
+  const seasonData = { id: '', imageUrl: '', number: 1 };
 
   return (
     <BrowserRouter>

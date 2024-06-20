@@ -94,7 +94,7 @@ export default function History() {
   return (
     <div className="history-container">
       <div className="history-header">
-      <h1>History List</h1>
+ 
         <button className="clear-button" onClick={clearHistory}>Clear History</button>
       </div>
       <div className="HistoryItemLayout">
