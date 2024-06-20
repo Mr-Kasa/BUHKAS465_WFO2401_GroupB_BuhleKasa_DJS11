@@ -4,12 +4,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2rem;
     width: 100%;
+    padding-left: 1rem;
   }
   
   .history-header {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     width: 100%;
@@ -18,13 +19,13 @@
   }
   
   .clear-button {
-    padding: 0.5rem 1rem;
+    padding: 1em 0em;
     border: none;
     background-color: #ff4d4d;
     color: white;
     cursor: pointer;
     border-radius: 5px;
-    margin-right: 1rem;
+    max-width: 100px;
   }
   
   .clear-button:hover {
@@ -40,7 +41,6 @@
     list-style-type: none;
     padding: 0;
     width: 100%;
-    max-width: 1200px;
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -59,15 +59,18 @@
   
   .episode-image {
     width: 100%;
-    max-width: 150px;
+    max-width: 100px;
     border-radius: 5px;
   }
   
   .history-item h3 {
     margin: 1rem 0;
   }
-  
-  .preview-button, .favourite-button {
+   .favourite-button {
+  background-color: #333;
+  max-width: 100px;
+  }
+  .preview-button {
     padding: 0.5rem 1rem;
     margin: 0.5rem;
     border: none;
@@ -75,6 +78,7 @@
     color: white;
     cursor: pointer;
     border-radius: 5px;
+    max-width: 100px;
   }
   
   .preview-button:hover, .favourite-button:hover {
@@ -82,7 +86,26 @@
   }
   
   .no-history {
-    font-size: 1.2rem;
-    color: #666;
+    font-size: 3rem;
+    color: #757373;
   }
-  
+  @media(min-width:700px){
+     .history-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr ;
+
+    }
+    .no-history{
+      grid-column: 2;
+    }
+  }
+
+  @media(min-width:1000px){
+    .history-list {
+     display: grid;
+     grid-template-columns: 1fr 1fr 1fr ;
+   }
+   .no-history{
+     grid-column: 2;
+   }
+ }

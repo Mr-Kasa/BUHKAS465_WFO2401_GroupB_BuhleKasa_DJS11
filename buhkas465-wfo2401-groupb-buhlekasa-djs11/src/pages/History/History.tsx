@@ -94,9 +94,10 @@ export default function History() {
   return (
     <div className="history-container">
       <div className="history-header">
+      <h1>History List</h1>
         <button className="clear-button" onClick={clearHistory}>Clear History</button>
-        <h1>History List</h1>
       </div>
+      <div className="HistoryItemLayout">
       {noHistory ? (
         <p className="no-history">No history items found.</p>
       ) : (
@@ -104,10 +105,10 @@ export default function History() {
           {history.map((episode) => (
             <li className="history-item" key={episode.episodeId}>
               <img src={episode.seasonImage} alt={episode.episodeTitle} className="episode-image" />
-              <h3>{episode.episodeTitle}</h3> {/* Display the episode title */}
-              <h3>{episode.showTitle}</h3> {/* Display the show title */}
-              <p>{`EP - ${getEpisodeNumber(episode.episodeId)}`}</p> {/* Display the episode number */}
-              <p>{`Season - ${getSeasonNumber(episode.episodeId)}`}</p> {/* Display the season number */}
+              <h3>{episode.episodeTitle}</h3> 
+              <h3>{episode.showTitle}</h3> 
+              <p>{`EP - ${getEpisodeNumber(episode.episodeId)}`}</p>
+              <p>{`Season - ${getSeasonNumber(episode.episodeId)}`}</p> 
               <p>Last played: {new Date(episode.playedAt).toLocaleString()}</p>
               <Link
                 to={{
@@ -124,6 +125,7 @@ export default function History() {
           ))}
         </ul>
       )}
+     </div>
     </div>
   );
 }

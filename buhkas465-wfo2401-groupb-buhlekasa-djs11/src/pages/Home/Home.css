@@ -4,20 +4,31 @@
   
   .HomePagePodcasts {
     display: flex;
-    flex-direction: column; /* Stack filter and podcast list vertically */
+    flex-direction: column;
+    margin-top:1em ;
   }
   
   .genreFilter {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;  /* Occupy full width */
-    margin-bottom: 1rem; /* Add some spacing after filter */
+    width: 100%; 
+    margin-bottom: 1rem; 
   }
-  
+  .sortButtonOldNew{
+    font-size: large;
+    max-width: 150px;
+    border-radius: black solid 2px ;
+  }
+  .sortButtonZA{
+    font-size: large;
+    max-width: 150px;
+    border-radius: black solid 2px ;
+  }
   .podcastList {
     display: grid;
-    grid-template-columns: 1fr; /* Adjust columns as needed for larger screens */
+    grid-template-columns: 1fr; 
     gap: 2rem;
     width: 100%;
     padding: 1rem;
@@ -47,13 +58,14 @@
     margin: auto;  
     display: flex;
     text-align: center;
+    margin-top: 5rem;
   }
 
 
 .controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding-left: 30px;
+  display: grid;
+  flex-direction: column;
   margin-bottom: 20px;
 }
 
@@ -66,23 +78,42 @@
   margin-right: 10px;
 }
 
-button {
-  padding: 10px 20px;
-  cursor: pointer;
-  margin-left: 10px; 
-}
-
-  @media (min-width: 600px) {
+  @media (min-width: 700px) {
     .podcastList {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
     }
+    
+    .controls {
+      padding-right: 50px;
+      display: grid;
+      gap: 1em;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr ;
+      align-items: end;
+      }
+      .genreFilter{
+        grid-column: 2;
+      }
+      .isLoading{
+        grid-column: 2;
+      }
+      .sortButtonOldNew{
+        min-width: 100px;
+          grid-column: 6;
+      }
+      .sortButtonZA{
+          grid-column: 4;
+          min-width: 100px;
+      }
   }
   
   
   
   @media (min-width: 1000px) {
     .podcastList {
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+    .isLoading{
+      grid-column: 3;
     }
   }
   

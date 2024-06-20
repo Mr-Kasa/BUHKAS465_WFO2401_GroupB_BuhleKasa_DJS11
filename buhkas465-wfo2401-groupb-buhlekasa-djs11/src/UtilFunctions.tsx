@@ -1,4 +1,4 @@
-
+import { parse } from 'date-fns';
 
 
 export async function fetchAllPodcasts() {
@@ -66,6 +66,9 @@ export async function fetchShowsByGenre(genreId: string): Promise<Podcast[]> {
   }
 }
 
+
+
+
 async function fetchShowDetails(showIds: string[]): Promise<Podcast[]> {
   try {
     const showDetails = await Promise.all(
@@ -97,6 +100,9 @@ async function fetchShowDetails(showIds: string[]): Promise<Podcast[]> {
     throw error;
   }
 }
+
+
+
 
 export function formatDateTime(dateTimeString) {
   console.log(dateTimeString)
@@ -224,44 +230,74 @@ export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
   }
   
 };
-// UtilFunctions.js
 
-export const getCurrentDateTime = () => {
-  const currentDate = new Date();
-  const options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-  };
-  return currentDate.toLocaleDateString('en-US', options);
-};
+
+
+
+
 
 export const sortEpisodesByTitleAZ = (episodes) => {
-  return [...episodes].sort((a, b) => a.episodeTitle.localeCompare(b.episodeTitle));
+  return episodes.sort((a, b) => a.episodeTitle.localeCompare(b.episodeTitle));
 };
 
 export const sortEpisodesByTitleZA = (episodes) => {
-  return [...episodes].sort((a, b) => b.episodeTitle.localeCompare(a.episodeTitle));
+  return episodes.sort((a, b) => b.episodeTitle.localeCompare(a.episodeTitle));
+};
+
+const parseDate = (dateString) => {
+  if (!dateString) return null; // Handle empty string
+  try {
+    return parse(dateString, 'MMMM d, yyyy \'at\' h:mm a', new Date());
+  } catch (error) {
+    console.error('Error parsing date:', dateString, error);
+    return null; // Return null for invalid date
+  }
+};
+
+const compareDates = (dateA, dateB, ascending = true) => {
+  if (!dateA && !dateB) return 0;
+  if (!dateA) return ascending ? -1 : 1;
+  if (!dateB) return ascending ? 1 : -1;
+  return ascending ? dateA - dateB : dateB - dateA;
 };
 
 export const sortEpisodesByDateOldest = (episodes) => {
-  return [...episodes].sort((a, b) => {
-    const dateA = parseFavouritedDate(a.dateFavourited);
-    const dateB = parseFavouritedDate(b.dateFavourited);
-    return dateA.getTime() - dateB.getTime();
+  console.log('Sorting by Date Oldest - Input Episodes:', episodes);
+  const sorted = episodes.sort((a, b) => {
+    const dateA = parseDate(a.dateFavourited);
+    const dateB = parseDate(b.dateFavourited);
+    console.log(`Parsing Dates - A: ${a.dateFavourited} (${dateA}), B: ${b.dateFavourited} (${dateB})`);
+    return compareDates(dateA, dateB, true);
   });
+  console.log('Sorted Episodes (Oldest):', sorted);
+  return sorted;
 };
 
 export const sortEpisodesByDateNewest = (episodes) => {
-  return [...episodes].sort((a, b) => {
-    const dateA = parseFavouritedDate(b.dateFavourited);
-    const dateB = parseFavouritedDate(a.dateFavourited);
-    return dateA.getTime() - dateB.getTime();
+  console.log('Sorting by Date Newest - Input Episodes:', episodes);
+  const sorted = episodes.sort((a, b) => {
+    const dateA = parseDate(a.dateFavourited);
+    const dateB = parseDate(b.dateFavourited);
+    console.log(`Parsing Dates - A: ${a.dateFavourited} (${dateA}), B: ${b.dateFavourited} (${dateB})`);
+    return compareDates(dateA, dateB, false);
+  });
+  console.log('Sorted Episodes (Newest):', sorted);
+  return sorted;
+};
+
+export const getCurrentDateTime = () => {
+  return new Date().toLocaleString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
   });
 };
+
+
+
 
 const parseFavouritedDate = (dateString) => {
   // Example: "June 19, 2024 at 4:51 PM"

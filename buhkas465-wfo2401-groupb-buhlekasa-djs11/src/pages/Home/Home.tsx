@@ -20,8 +20,8 @@ const Home: React.FC = () => {
   const [isInitialLoading, setIsInitialLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
-  const [titleSortOrder, setTitleSortOrder] = useState<'AZ' | 'ZA'>('AZ');
-  const [dateSortOrder, setDateSortOrder] = useState<'Oldest' | 'Newest'>('Newest');
+  const [titleSortOrder, setTitleSortOrder] = useState<'AZ' | 'ZA' | null>('AZ');
+  const [dateSortOrder, setDateSortOrder] = useState<'Oldest' | 'Newest' | null>(null);
 
   const loadPodcasts = async (genreId: number | null = null) => {
     setIsInitialLoading(true);
@@ -33,6 +33,7 @@ const Home: React.FC = () => {
       console.log('Fetched shows:', fetchedShows);
 
       setAllPodcasts(fetchedShows);
+      // Apply initial sorting on title (AZ)
       applyAllFilters(fetchedShows);
     } catch (error: any) {
       console.error('Error fetching podcasts:', error);
@@ -47,13 +48,15 @@ const Home: React.FC = () => {
       ? podcasts.filter(podcast => podcast.genres.includes(selectedGenre))
       : podcasts;
 
-    filteredPodcasts = titleSortOrder === 'AZ'
-      ? sortPodcastsByTitleAZ(filteredPodcasts)
-      : sortPodcastsByTitleZA(filteredPodcasts);
-
-    filteredPodcasts = dateSortOrder === 'Oldest'
-      ? sortPodcastsByDateOldest(filteredPodcasts)
-      : sortPodcastsByDateNewest(filteredPodcasts);
+    if (titleSortOrder) {
+      filteredPodcasts = titleSortOrder === 'AZ'
+        ? sortPodcastsByTitleAZ(filteredPodcasts)
+        : sortPodcastsByTitleZA(filteredPodcasts);
+    } else if (dateSortOrder) {
+      filteredPodcasts = dateSortOrder === 'Newest'
+        ? sortPodcastsByDateNewest(filteredPodcasts)
+        : sortPodcastsByDateOldest(filteredPodcasts);
+    }
 
     setDisplayedPodcasts(filteredPodcasts);
     console.log(`Number of displayed items after sorting and filtering: ${filteredPodcasts.length}`);
@@ -75,10 +78,12 @@ const Home: React.FC = () => {
 
   const handleTitleSortToggle = () => {
     setTitleSortOrder(prevOrder => (prevOrder === 'AZ' ? 'ZA' : 'AZ'));
+    setDateSortOrder(null);
   };
 
   const handleDateSortToggle = () => {
-    setDateSortOrder(prevOrder => (prevOrder === 'Oldest' ? 'Newest' : 'Oldest'));
+    setDateSortOrder(prevOrder => (prevOrder === 'Newest' ? 'Oldest' : 'Newest'));
+    setTitleSortOrder(null);
   };
 
   const getGenreNames = (genreIds: number[]) => {
@@ -112,7 +117,7 @@ const Home: React.FC = () => {
   return (
     <div className="HomePagePodcasts">
       <div className="controls">
-        <div className="genreFilter">
+        <div className='genreFilter'>
           <label htmlFor="genreSelect">Filter by Genre: </label>
           <select
             id="genreSelect"
@@ -127,20 +132,22 @@ const Home: React.FC = () => {
             ))}
           </select>
         </div>
-        <button className='sortAZ' onClick={handleTitleSortToggle}>
+
+        <button className='sortButtonZA' onClick={handleTitleSortToggle}>
           Sort {titleSortOrder === 'AZ' ? 'Z-A' : 'A-Z'}
         </button>
-        <button className='sortDate' onClick={handleDateSortToggle}>
+
+        <button className='sortButtonOldNew' onClick={handleDateSortToggle}>
           Sort by Date {dateSortOrder === 'Oldest' ? 'Newest' : 'Oldest'}
         </button>
       </div>
+
       <div className="podcastList">
         {isInitialLoading ? (
           <p className='isLoading'>Loading...</p>
         ) : (
           <>
-            {podcastElements.length > 0 ? podcastElements : <p>No podcasts available for this genre.</p>}
-            {error && <h2 className='isLoading'>Please check your internet connection.</h2>}
+            {podcastElements.length > 0 ? podcastElements : <h2 className='isLoading'>Please check your internet connection.</h2>}
           </>
         )}
       </div>
@@ -149,3 +156,5 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+

@@ -26,7 +26,8 @@ const getSeasonNumber = (episodeId) => {
 const Favourites = () => {
   const [episodes, setEpisodes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState('');
+  const [sortByTitle, setSortByTitle] = useState('AZ');
+  const [sortByDate, setSortByDate] = useState(null);
 
   useEffect(() => {
     const storedEpisodes = getEpisodesFromLocalStorage();
@@ -55,31 +56,38 @@ const Favourites = () => {
     localStorage.setItem('episodes', JSON.stringify(updatedEpisodes));
   };
 
-  const handleSortAZ = () => {
-    if (sortBy !== 'AZ') {
-      const sortedEpisodes = sortEpisodesByTitleAZ([...episodes]); // Create a copy of episodes
-      console.log('Sorting A-Z:', sortedEpisodes);
-      setEpisodes(sortedEpisodes);
-      setSortBy('AZ');
-    } else {
-      const sortedEpisodes = sortEpisodesByTitleZA([...episodes]); // Create a copy of episodes
-      console.log('Sorting Z-A:', sortedEpisodes);
-      setEpisodes(sortedEpisodes);
-      setSortBy('ZA');
+  const handleSortTitle = () => {
+    if (episodes.length > 0) {
+      console.log('Sorting by title:', sortByTitle);
+      if (sortByTitle === 'AZ') {
+        const sortedEpisodes = sortEpisodesByTitleZA([...episodes]); // Create a copy of episodes
+        setEpisodes(sortedEpisodes);
+        setSortByTitle('ZA');
+      } else {
+        const sortedEpisodes = sortEpisodesByTitleAZ([...episodes]); // Create a copy of episodes
+        setEpisodes(sortedEpisodes);
+        setSortByTitle('AZ');
+      }
+      setSortByDate(null); // Deactivate date sorting
     }
   };
 
-  const handleSortNewest = () => {
-    if (sortBy !== 'Newest') {
-      const sortedEpisodes = sortEpisodesByDateNewest([...episodes]); // Create a copy of episodes
-      console.log('Sorting Newest:', sortedEpisodes);
-      setEpisodes(sortedEpisodes);
-      setSortBy('Newest');
-    } else {
-      const sortedEpisodes = sortEpisodesByDateOldest([...episodes]); // Create a copy of episodes
-      console.log('Sorting Oldest:', sortedEpisodes);
-      setEpisodes(sortedEpisodes);
-      setSortBy('Oldest');
+  const handleSortDate = () => {
+    if (episodes.length > 0) {
+      console.log('Sorting by date:', sortByDate);
+      console.log('Episodes before sorting by date:', episodes);
+      if (sortByDate === 'Newest') {
+        const sortedEpisodes = sortEpisodesByDateOldest([...episodes]); // Create a copy of episodes
+        console.log('Sorted episodes (Oldest):', sortedEpisodes);
+        setEpisodes(sortedEpisodes);
+        setSortByDate('Oldest');
+      } else {
+        const sortedEpisodes = sortEpisodesByDateNewest([...episodes]); // Create a copy of episodes
+        console.log('Sorted episodes (Newest):', sortedEpisodes);
+        setEpisodes(sortedEpisodes);
+        setSortByDate('Newest');
+      }
+      setSortByTitle(null); // Deactivate title sorting
     }
   };
 
@@ -92,11 +100,11 @@ const Favourites = () => {
       <div className="favourites-header">
         <h1>Favourite Episodes</h1>
         <div className="sort-buttons">
-          <button onClick={handleSortAZ}>
-            {sortBy === 'AZ' ? 'Sort Z-A' : 'Sort A-Z'}
+          <button onClick={handleSortTitle}>
+            {sortByTitle === 'AZ' ? 'Sort A-Z' : 'Sort Z-A'}
           </button>
-          <button onClick={handleSortNewest}>
-            {sortBy === 'Newest' ? 'Sort Oldest-Newest' : 'Sort Newest-Oldest'}
+          <button onClick={handleSortDate}>
+            {sortByDate === 'Newest' ? 'Sort Newest-Oldest' : 'Sort Oldest-Newest'}
           </button>
         </div>
       </div>

@@ -43,4 +43,5 @@ body{
 
 .listItem{
     text-decoration: none;
+    list-style-type: none;
 }
