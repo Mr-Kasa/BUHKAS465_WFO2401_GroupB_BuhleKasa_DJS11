@@ -94,40 +94,44 @@ export default function History() {
   return (
     <div className="history-container">
       <div className="history-header">
- 
-        <button className="clear-button" onClick={clearHistory}>Clear History</button>
+        <div className="custom-button clear-button" onClick={clearHistory}>
+          <h2>Clear History</h2>
+        </div>
       </div>
       <div className="HistoryItemLayout">
-      {noHistory ? (
-        <p className="no-history">No history items found.</p>
-      ) : (
-        <ul className="history-list">
-          {history.map((episode) => (
-            <li className="history-item" key={episode.episodeId}>
-              <img src={episode.seasonImage} alt={episode.episodeTitle} className="episode-image" />
-              <h3>{episode.episodeTitle}</h3> 
-              <h3>{episode.showTitle}</h3> 
-              <p>{`EP - ${getEpisodeNumber(episode.episodeId)}`}</p>
-              <p>{`Season - ${getSeasonNumber(episode.episodeId)}`}</p> 
-              <p>Last played: {new Date(episode.playedAt).toLocaleString()}</p>
-              <Link
-                to={{
-                  pathname: "/episode-preview",
-                  state: { season: episode }
-                }}
-              >
-                <button className="preview-button">Preview</button>
-              </Link>
-              <button className="favourite-button" onClick={() => toggleFavourite(episode)}>
-                {episode.isFavourite ? '❤️' : '♡'}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-     </div>
+        {noHistory ? (
+          <p className="no-history">No history items found.</p>
+        ) : (
+          <ul className="history-list">
+            {history.map((episode) => (
+              <li className="history-item" key={episode.episodeId}>
+                <img src={episode.seasonImage} alt={episode.episodeTitle} className="episode-image" />
+                <h3>{episode.episodeTitle}</h3> 
+                <h3>{episode.showTitle}</h3> 
+                <p>{`EP - ${getEpisodeNumber(episode.episodeId)}`}</p>
+                <p>{`Season - ${getSeasonNumber(episode.episodeId)}`}</p> 
+                <p>Last played: {new Date(episode.playedAt).toLocaleString()}</p>
+                <Link
+                  to={{
+                    pathname: "/episode-preview",
+                    state: { season: episode }
+                  }}
+                >
+                  <div className="custom-button preview-button">
+                    <h2>Preview</h2>
+                  </div>
+                </Link>
+                <div className="custom-button favourite-button" onClick={() => toggleFavourite(episode)}>
+                  <h2>{episode.isFavourite ? '❤️' : '♡'}</h2>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
+
 
 

@@ -106,12 +106,12 @@ const Favourites = () => {
       <div className="favourites-header">
         <h1>Favourite Episodes</h1>
         <div className="sort-buttons">
-          <button onClick={handleSortTitle}>
-            {sortByTitle === 'AZ' ? 'Sort A-Z by Title' : 'Sort Z-A by Title'}
-          </button>
-          <button onClick={handleSortDate}>
-            {sortByDate === 'Newest' ? 'Sort Newest-Oldest by Date' : 'Sort Oldest-Newest by Date'}
-          </button>
+          <div className="custom-button" onClick={handleSortTitle}>
+            <h2>{sortByTitle === 'AZ' ? 'Sort A-Z by Title' : 'Sort Z-A by Title'}</h2>
+          </div>
+          <div className="custom-button" onClick={handleSortDate}>
+            <h2>{sortByDate === 'Newest' ? 'Sort Newest-Oldest by Date' : 'Sort Oldest-Newest by Date'}</h2>
+          </div>
         </div>
       </div>
       {loading ? (
@@ -126,9 +126,9 @@ const Favourites = () => {
               <p>{`Episode: ${getEpisodeNumber(storedEpisode.episodeId)}`}</p>
               <p>{`Season: ${getSeasonNumber(storedEpisode.episodeId)}`}</p>
               <p>{`Favourited On: ${storedEpisode.dateFavourited}`}</p>
-              <button className="favourite-button" onClick={() => toggleFavourite(storedEpisode)}>
-                {storedEpisode.isFavourite ? '❤️' : '♡'}
-              </button>
+              <div className="custom-button favourite-button" onClick={() => toggleFavourite(storedEpisode)}>
+                <h2>{storedEpisode.isFavourite ? '❤️' : '♡'}</h2>
+              </div>
             </div>
           ))}
         </div>

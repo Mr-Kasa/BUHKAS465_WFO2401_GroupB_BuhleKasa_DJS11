@@ -5,7 +5,6 @@ import { Episode, Season } from '../../types';
 import { getCurrentDateTime } from '../../UtilFunctions';
 import "./episodePreview.css"
 
-
 const EpisodePreview: React.FC = () => {
   const location = useLocation();
   const { season } = location.state as { season: Season };
@@ -25,20 +24,20 @@ const EpisodePreview: React.FC = () => {
 
   const findEpisodeId = (episodeDescription: string): string | null => {
     console.log('Searching for episode with values:', { episodeDescription });
-  
+
     try {
       const episodes = JSON.parse(localStorage.getItem('episodes')) || [];
-  
+
       if (!episodes || episodes.length === 0) {
         console.error('No episodes found in local storage.');
         return null;
       }
-  
+
       const matchingEpisode = episodes.find(
         (episode: { description: string }) =>
           episode.description === episodeDescription
       );
-  
+
       if (matchingEpisode) {
         console.log('Matching episode found:', matchingEpisode);
         return matchingEpisode.episodeId;
@@ -51,7 +50,7 @@ const EpisodePreview: React.FC = () => {
       return null;
     }
   };
-  
+
   const handleEpisodeClick = (episode: Episode) => {
     const episodeId = findEpisodeId(episode.description);
     if (episodeId) {
@@ -86,29 +85,31 @@ const EpisodePreview: React.FC = () => {
     <div className='episodeLayout'>
       <h1>{season.title}</h1>
       <div className='EpisodesContainer'>
-      <img className='seasonImg' src={season.image} alt={season.title} />
-      <ul className='listItem'>
-        {season.episodes.map((episode) => {
-          
-          const storedEpisode = episodes.find(ep => ep.episodeTitle === episode.title && ep.description === episode.description) || episode;
-          return (
-            <div className='episodeTile'>
-            <li className='listItem' key={storedEpisode.episodeId}>
-              <h3>{storedEpisode.episodeTitle}</h3>
-              <p>{storedEpisode.description}</p>
-              <button onClick={() => handleEpisodeClick(storedEpisode)}>Play</button>
-              <button className='favoutiteButton' onClick={() => toggleFavourite(storedEpisode)}>
-                {storedEpisode.isFavourite ?'❤️':  '♡' }
-              </button>
-            </li>
-            </div>
-          );
-        })}
-      </ul>
+        <img className='seasonImg' src={season.image} alt={season.title} />
+        <ul className='listItem'>
+          {season.episodes.map((episode) => {
+            const storedEpisode = episodes.find(ep => ep.episodeTitle === episode.title && ep.description === episode.description) || episode;
+            return (
+              <div className='episodeTile' key={storedEpisode.episodeId}>
+                <li className='listItem'>
+                  <h3>{storedEpisode.episodeTitle}</h3>
+                  <p>{storedEpisode.description}</p>
+                  <div className="custom-button" onClick={() => handleEpisodeClick(storedEpisode)}>
+                    <h2>Play</h2>
+                  </div>
+                  <div className='custom-button favouriteButton' onClick={() => toggleFavourite(storedEpisode)}>
+                    <h2>{storedEpisode.isFavourite ? '❤️' : '♡'}</h2>
+                  </div>
+                </li>
+              </div>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );
 };
 
 export default EpisodePreview;
+
 
