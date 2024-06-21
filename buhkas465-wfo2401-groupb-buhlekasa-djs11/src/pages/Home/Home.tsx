@@ -22,6 +22,7 @@ const Home: React.FC = () => {
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
   const [titleSortOrder, setTitleSortOrder] = useState<'AZ' | 'ZA' | null>('AZ');
   const [dateSortOrder, setDateSortOrder] = useState<'Oldest' | 'Newest' | null>(null);
+  const [searchInput, setSearchInput] = useState<string>('');
 
   const loadPodcasts = async (genreId: number | null = null) => {
     setIsInitialLoading(true);
@@ -97,6 +98,22 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value.toLowerCase();
+    setSearchInput(inputValue);
+
+    // Filter displayed podcasts based on search input
+    const filteredPodcasts = allPodcasts.filter(podcast =>
+      podcast.title.toLowerCase().includes(inputValue)
+    );
+    setDisplayedPodcasts(filteredPodcasts);
+  };
+
+  const handleClearSearch = () => {
+    setSearchInput('');
+    setDisplayedPodcasts(allPodcasts);
+  };
+
   const podcastElements = displayedPodcasts.map((podcast: Podcast) => (
     <div key={podcast.id} className="podcast-tile">
       <Link to={`/show/${podcast.id}`}>
@@ -133,13 +150,25 @@ const Home: React.FC = () => {
           </select>
         </div>
 
-        <button className='sortButtonZA' onClick={handleTitleSortToggle}>
-          Sort {titleSortOrder === 'AZ' ? 'Z-A' : 'A-Z'}
-        </button>
+        <div className="custom-button sortButtonZA" onClick={handleTitleSortToggle}>
+          <h2>Sort {titleSortOrder === 'AZ' ? 'Z-A' : 'A-Z'}</h2>
+        </div>
 
-        <button className='sortButtonOldNew' onClick={handleDateSortToggle}>
-          Sort by Date {dateSortOrder === 'Oldest' ? 'Newest' : 'Oldest'}
-        </button>
+        <div className="custom-button sortButtonOldNew" onClick={handleDateSortToggle}>
+          <h2>Sort by Date {dateSortOrder === 'Oldest' ? 'Newest' : 'Oldest'}</h2>
+        </div>
+      </div>
+
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Type podcast name for suggestions.."
+          value={searchInput}
+          onChange={handleSearchInputChange}
+        />
+        <div className="custom-button clear-button" onClick={handleClearSearch}>
+          <h2>Clear</h2>
+        </div>
       </div>
 
       <div className="podcastList">
@@ -147,7 +176,7 @@ const Home: React.FC = () => {
           <p className='isLoading'>Loading...</p>
         ) : (
           <>
-            {podcastElements.length > 0 ? podcastElements : <h2 className='isLoading'>Please check your internet connection.</h2>}
+            {podcastElements.length > 0 ? podcastElements : <h2 className='isLoading'>No podcasts found.</h2>}
           </>
         )}
       </div>
@@ -156,5 +185,8 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+
+
 
 
