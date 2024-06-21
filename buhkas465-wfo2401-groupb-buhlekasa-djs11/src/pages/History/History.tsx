@@ -111,16 +111,6 @@ export default function History() {
                 <p>{`EP - ${getEpisodeNumber(episode.episodeId)}`}</p>
                 <p>{`Season - ${getSeasonNumber(episode.episodeId)}`}</p> 
                 <p>Last played: {new Date(episode.playedAt).toLocaleString()}</p>
-                <Link
-                  to={{
-                    pathname: "/episode-preview",
-                    state: { season: episode }
-                  }}
-                >
-                  <div className="custom-button preview-button">
-                    <h2>Preview</h2>
-                  </div>
-                </Link>
                 <div className="custom-button favourite-button" onClick={() => toggleFavourite(episode)}>
                   <h2>{episode.isFavourite ? '❤️' : '♡'}</h2>
                 </div>

@@ -104,12 +104,11 @@ const Favourites = () => {
   return (
     <div className="favourites-container">
       <div className="favourites-header">
-        <h1>Favourite Episodes</h1>
         <div className="sort-buttons">
-          <div className="custom-button" onClick={handleSortTitle}>
+          <div className="custom-button sortAZ" onClick={handleSortTitle}>
             <h2>{sortByTitle === 'AZ' ? 'Sort A-Z by Title' : 'Sort Z-A by Title'}</h2>
           </div>
-          <div className="custom-button" onClick={handleSortDate}>
+          <div className="custom-button sortDate"  onClick={handleSortDate}>
             <h2>{sortByDate === 'Newest' ? 'Sort Newest-Oldest by Date' : 'Sort Oldest-Newest by Date'}</h2>
           </div>
         </div>
@@ -120,7 +119,7 @@ const Favourites = () => {
         <div className="favourites-list">
           {favouriteEpisodes.map((storedEpisode) => (
             <div className="favourites-item" key={storedEpisode.episodeId}>
-              <img src={storedEpisode.seasonImage} alt={storedEpisode.episodeTitle} />
+              <img className='seasonImage' src={storedEpisode.seasonImage} alt={storedEpisode.episodeTitle} />
               <h2>{storedEpisode.episodeTitle}</h2>
               <p>{`Show: ${storedEpisode.showTitle}`}</p>
               <p>{`Episode: ${getEpisodeNumber(storedEpisode.episodeId)}`}</p>

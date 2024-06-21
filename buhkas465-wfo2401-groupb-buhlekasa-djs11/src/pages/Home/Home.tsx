@@ -165,6 +165,7 @@ const Home: React.FC = () => {
           placeholder="Type podcast name for suggestions.."
           value={searchInput}
           onChange={handleSearchInputChange}
+          className='Input'
         />
         <div className="custom-button clear-button" onClick={handleClearSearch}>
           <h2>Clear</h2>
