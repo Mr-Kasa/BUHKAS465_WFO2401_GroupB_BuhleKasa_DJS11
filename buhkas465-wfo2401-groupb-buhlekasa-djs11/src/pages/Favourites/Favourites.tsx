@@ -7,23 +7,47 @@ import {
   sortEpisodesByDateNewest,
   getCurrentDateTime
 } from '../../UtilFunctions';
+import { Episode } from '../../types';
 
-const getEpisodesFromLocalStorage = () => {
+/**
+ * Retrieves episodes from local storage.
+ * 
+ * @returns {Episode[]} An array of episodes.
+ */
+const getEpisodesFromLocalStorage = (): Episode[] => {
   const episodes = localStorage.getItem('episodes');
   return episodes ? JSON.parse(episodes) : [];
 };
 
-const getEpisodeNumber = (episodeId) => {
+/**
+ * Extracts the episode number from the episode ID.
+ * 
+ * @param {string} episodeId - The ID of the episode.
+ * @returns {string} The episode number.
+ */
+const getEpisodeNumber = (episodeId: string): string => {
   const parts = episodeId.split('-');
   return parts[parts.length - 1];
 };
 
-const getSeasonNumber = (episodeId) => {
+/**
+ * Extracts the season number from the episode ID.
+ * 
+ * @param {string} episodeId - The ID of the episode.
+ * @returns {string} The season number.
+ */
+const getSeasonNumber = (episodeId: string): string => {
   const parts = episodeId.split('-');
   return parts[parts.length - 2];
 };
 
-const sortEpisodesByEpisodeId = (episodes) => {
+/**
+ * Sorts episodes by their episode ID.
+ * 
+ * @param {Episode[]} episodes - The array of episodes to be sorted.
+ * @returns {Episode[]} The sorted array of episodes.
+ */
+const sortEpisodesByEpisodeId = (episodes: Episode[]): Episode[] => {
   try {
     // Sorting function by episodeId
     const sortedEpisodes = episodes.sort((a, b) => {
@@ -37,12 +61,18 @@ const sortEpisodesByEpisodeId = (episodes) => {
   }
 };
 
-const Favourites = () => {
-  const [episodes, setEpisodes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [sortByTitle, setSortByTitle] = useState(null); // null means no sorting
-  const [sortByDate, setSortByDate] = useState(null); // null means no sorting
+/**
+ * Favourites component to display and manage favourite episodes.
+ * 
+ * @returns {JSX.Element} The Favourites component.
+ */
+const Favourites: React.FC = () => {
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [sortByTitle, setSortByTitle] = useState<string | null>(null); // null means no sorting
+  const [sortByDate, setSortByDate] = useState<string | null>(null); // null means no sorting
 
+  // Effect to load and sort episodes on mount
   useEffect(() => {
     const storedEpisodes = getEpisodesFromLocalStorage();
     const sortedEpisodes = sortEpisodesByEpisodeId([...storedEpisodes]);
@@ -50,7 +80,12 @@ const Favourites = () => {
     setLoading(false);
   }, []); // Empty dependency array ensures this effect runs only once on mount
 
-  const toggleFavourite = (episode) => {
+  /**
+   * Toggles the favourite status of an episode.
+   * 
+   * @param {Episode} episode - The episode to toggle favourite status.
+   */
+  const toggleFavourite = (episode: Episode) => {
     const updatedEpisodes = episodes.map((ep) => {
       if (ep.episodeId === episode.episodeId) {
         const updatedEpisode = {
@@ -67,6 +102,9 @@ const Favourites = () => {
     localStorage.setItem('episodes', JSON.stringify(updatedEpisodes));
   };
 
+  /**
+   * Handles sorting episodes by title.
+   */
   const handleSortTitle = () => {
     let sortedEpisodes;
     if (sortByTitle === 'AZ') {
@@ -80,6 +118,9 @@ const Favourites = () => {
     setSortByDate(null); // Deactivate date sorting
   };
 
+  /**
+   * Handles sorting episodes by date.
+   */
   const handleSortDate = () => {
     let sortedEpisodes;
     if (sortByDate === 'Newest') {
@@ -93,8 +134,8 @@ const Favourites = () => {
     setSortByTitle(null); // Deactivate title sorting
   };
 
+  // Effect to log episodeIds of favourite episodes after any sorting
   useEffect(() => {
-    // Log episodeIds of favourite episodes after any sorting
     const favouriteSortedIds = episodes.filter(ep => ep.isFavourite).map(ep => ep.episodeId);
     console.log('Favourite episodes sorted:', favouriteSortedIds);
   }, [episodes]); // Effect runs whenever episodes state changes
@@ -108,7 +149,7 @@ const Favourites = () => {
           <div className="custom-button sortAZ" onClick={handleSortTitle}>
             <h2>{sortByTitle === 'AZ' ? 'Sort A-Z by Title' : 'Sort Z-A by Title'}</h2>
           </div>
-          <div className="custom-button sortDate"  onClick={handleSortDate}>
+          <div className="custom-button sortDate" onClick={handleSortDate}>
             <h2>{sortByDate === 'Newest' ? 'Sort Newest-Oldest by Date' : 'Sort Oldest-Newest by Date'}</h2>
           </div>
         </div>

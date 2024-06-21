@@ -1,6 +1,27 @@
-import { parse } from 'date-fns';
+import { useState, useEffect } from 'react';
 
+/**
+ * Represents an episode of a podcast.
+ * @typedef {Object} Episode
+ * @property {string} id - The unique identifier of the episode.
+ * @property {string} title - The title of the episode.
+ * @property {string} image - The URL to the episode's image.
+ * @property {string} episodeId - The unique identifier for the episode (e.g., 'episode-123').
+ * @property {string} episodeTitle - The title of the episode.
+ * @property {string} showId - The ID of the show to which the episode belongs.
+ * @property {string} showTitle - The title of the show.
+ * @property {string} showImage - The URL to the show's image.
+ * @property {string} seasonImage - The URL to the season's image.
+ * @property {string} file - The URL or path to the episode file.
+ * @property {boolean} isFavourite - Indicates if the episode is marked as a favorite.
+ * @property {string} description - The description of the episode.
+ * @property {string} dateFavourited - The date when the episode was favorited.
+ */
 
+/**
+ * Fetches all podcasts from the API.
+ * @returns {Promise<any[]>} Array of podcast data.
+ */
 export async function fetchAllPodcasts() {
   try {
     const response = await fetch('https://podcast-api.netlify.app');
@@ -19,37 +40,29 @@ export async function fetchAllPodcasts() {
   }
 }
 
-
-
-
-
-
-export async function fetchShowsByGenre(genreId: string): Promise<Podcast[]> {
+/**
+ * Fetches shows by genre from the API.
+ * @param {string} genreId - The ID of the genre to filter shows.
+ * @returns {Promise<any[]>} Array of podcast data filtered by genre.
+ */
+export async function fetchShowsByGenre(genreId) {
   const baseUrl = 'https://podcast-api.netlify.app';
   const url = genreId ? `${baseUrl}/genre/${genreId}` : baseUrl;
 
-  console.log(`${genreId} in Utilfunctions`);
   try {
     const response = await fetch(url);
-
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-
     const data = await response.json();
-    console.log('Fetched data:', data);
 
     if (genreId && data.hasOwnProperty('shows')) {
-      const showIds = data.shows;  // Assuming 'shows' is an array of show IDs
-      console.log('Show IDs:', showIds);
-
+      const showIds = data.shows; // Assuming 'shows' is an array of show IDs
       const showDetails = await fetchShowDetails(showIds);
-      console.log('Show details:', showDetails);
-
       return showDetails;
     } else if (Array.isArray(data)) {
       // If no genreId is provided, return the base data which is the list of shows
-      return data.map((show: any) => ({
+      return data.map((show) => ({
         id: show.id,
         title: show.title,
         imageUrl: show.image, // Ensure this matches the correct field from the base data response
@@ -62,38 +75,35 @@ export async function fetchShowsByGenre(genreId: string): Promise<Podcast[]> {
     }
   } catch (error) {
     console.error('Error fetching shows by genre:', error);
-    throw error;  // Re-throw the error after logging it
+    throw error; // Re-throw the error after logging it
   }
 }
 
-
-
-
-async function fetchShowDetails(showIds: string[]): Promise<Podcast[]> {
+/**
+ * Fetches detailed information for multiple shows.
+ * @param {string[]} showIds - Array of show IDs to fetch details for.
+ * @returns {Promise<any[]>} Array of podcast details for each show ID.
+ */
+async function fetchShowDetails(showIds) {
   try {
     const showDetails = await Promise.all(
       showIds.map(async (id) => {
         const url = `https://podcast-api.netlify.app/id/${id}`;
         const response = await fetch(url);
-
         if (!response.ok) {
           throw new Error(`Failed to fetch show with id ${id}`);
         }
-
         const showData = await response.json();
-        console.log(`Fetched show data for id ${id}:`, showData);
-
         return {
           id: showData.id,
           title: showData.title,
           imageUrl: showData.seasons[0].image, // Assuming first season image
           seasons: showData.seasons.length,
           genres: showData.genres,
-          update: showData.updated, 
+          update: showData.updated,
         };
       })
     );
-
     return showDetails;
   } catch (error) {
     console.error('Error fetching show details:', error);
@@ -101,65 +111,81 @@ async function fetchShowDetails(showIds: string[]): Promise<Podcast[]> {
   }
 }
 
-
-
-
+/**
+ * Formats a date-time string into a readable format.
+ * @param {string} dateTimeString - The date-time string to format.
+ * @returns {string} Formatted date-time string (e.g., '01-01-2024 12:00 PM').
+ */
 export function formatDateTime(dateTimeString) {
-  console.log(dateTimeString)
-  // Check if the string is empty or invalid
   if (!dateTimeString || !Date.parse(dateTimeString)) {
-    console.log("date is an empty string")
-    return ""; // Return an empty string if invalid
+    return "";
   }
 
   const date = new Date(dateTimeString);
 
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero for single-digit months
+  const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
 
   const hours = date.getHours();
   const minutes = String(date.getMinutes()).padStart(2, '0');
   const ampm = hours >= 12 ? 'PM' : 'AM';
-  const adjustedHours = hours % 12 || 12; // Convert to 12-hour format (12 for midnight)
+  const adjustedHours = hours % 12 || 12;
 
   return `${day}-${month}-${year} ${adjustedHours}:${minutes} ${ampm}`;
 }
 
-
-
-export const sortPodcastsByTitleAZ = (podcasts: Podcast[]) => {
+/**
+ * Sorts podcasts alphabetically by title in ascending order.
+ * @param {Podcast[]} podcasts - Array of podcasts to sort.
+ * @returns {Podcast[]} Sorted array of podcasts.
+ */
+export const sortPodcastsByTitleAZ = (podcasts) => {
   return [...podcasts].sort((a, b) => a.title.localeCompare(b.title));
 };
 
-export const sortPodcastsByTitleZA = (podcasts: Podcast[]) => {
+/**
+ * Sorts podcasts alphabetically by title in descending order.
+ * @param {Podcast[]} podcasts - Array of podcasts to sort.
+ * @returns {Podcast[]} Sorted array of podcasts.
+ */
+export const sortPodcastsByTitleZA = (podcasts) => {
   return [...podcasts].sort((a, b) => b.title.localeCompare(a.title));
 };
 
-export const sortPodcastsByDateOldest = (podcasts: Podcast[]) => {
+/**
+ * Sorts podcasts by date from oldest to newest.
+ * @param {Podcast[]} podcasts - Array of podcasts to sort.
+ * @returns {Podcast[]} Sorted array of podcasts.
+ */
+export const sortPodcastsByDateOldest = (podcasts) => {
   return [...podcasts].sort((a, b) => new Date(a.update).getTime() - new Date(b.update).getTime());
 };
 
-export const sortPodcastsByDateNewest = (podcasts: Podcast[]) => {
+/**
+ * Sorts podcasts by date from newest to oldest.
+ * @param {Podcast[]} podcasts - Array of podcasts to sort.
+ * @returns {Podcast[]} Sorted array of podcasts.
+ */
+export const sortPodcastsByDateNewest = (podcasts) => {
   return [...podcasts].sort((a, b) => new Date(b.update).getTime() - new Date(a.update).getTime());
 };
 
+/**
+ * Interface representing a podcast.
+ * @interface Podcast
+ * @property {string} id - The unique identifier of the podcast.
+ * @property {string} title - The title of the podcast.
+ * @property {string} image - The URL to the podcast's image.
+ * @property {number} seasons - The number of seasons the podcast has.
+ */
 
-
-
-
-
-
-
-
-export interface Podcast {
-  id: string;
-  title: string;
-  image: string;
-  seasons: number;
-}
-
-export const sortByTitleAlphabetically = (podcasts: Podcast[]): Podcast[] => {
+/**
+ * Sorts podcasts by title alphabetically (case-insensitive).
+ * @param {Podcast[]} podcasts - Array of podcasts to sort.
+ * @returns {Podcast[]} Sorted array of podcasts.
+ */
+export const sortByTitleAlphabetically = (podcasts) => {
   return podcasts.filter(podcast => podcast.title).sort((a, b) => {
     if (a.title && b.title) {
       return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
@@ -168,35 +194,29 @@ export const sortByTitleAlphabetically = (podcasts: Podcast[]): Podcast[] => {
   });
 };
 
-
-
+/**
+ * Stores information about a played episode in local storage.
+ * @param {string} episodeTitle - The title of the episode played.
+ * @param {string} episodeDescription - The description of the episode played.
+ */
 export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
-  // Received parameters can be removed as they don't provide essential information during execution
-
   const findEpisodeId = (episodeTitle, episodeDescription) => {
     try {
-      // Retrieve episodes array from local storage
       const episodes = JSON.parse(localStorage.getItem('episodes')) || [];
-
       if (!episodes || episodes.length === 0) {
         console.error("No episodes found in local storage.");
         return null;
       }
-
       let foundEpisodeId = null;
-
-      // Loop through each episode to find the matching one
       episodes.forEach(episode => {
         if (episode.description === episodeDescription) {
           foundEpisodeId = episode.episodeId || null;
         }
       });
-
       if (!foundEpisodeId) {
         console.error('No episode found with the given title and description.');
         return null;
       }
-
       return foundEpisodeId;
     } catch (error) {
       console.error('Error finding episode ID:', error);
@@ -211,39 +231,45 @@ export const storePlayedEpisode = (episodeTitle, episodeDescription) => {
     return;
   }
 
-  const now = new Date(); // Get current date and time
-
+  const now = new Date();
   const playedEpisode = {
     episodeId: episodeId,
     episodeTitle: episodeTitle,
-    playedAt: now.toISOString() // Store timestamp in ISO 8601 format
+    playedAt: now.toISOString()
   };
 
   try {
     let history = JSON.parse(localStorage.getItem('history')) || [];
     history.push(playedEpisode);
     localStorage.setItem('history', JSON.stringify(history));
-   
-    // console.log('Played episode stored successfully in history:', playedEpisode);
   } catch (error) {
-    console.error('Error storing played episode in history:', error);
+    console.error('Error storing played episodein history:', error);
   }
-  
 };
 
-
-
-
-
-
+/**
+ * Sorts episodes alphabetically by title in ascending order.
+ * @param {Episode[]} episodes - Array of episodes to sort.
+ * @returns {Episode[]} Sorted array of episodes.
+ */
 export const sortEpisodesByTitleAZ = (episodes) => {
   return episodes.sort((a, b) => a.episodeTitle.localeCompare(b.episodeTitle));
 };
 
+/**
+ * Sorts episodes alphabetically by title in descending order.
+ * @param {Episode[]} episodes - Array of episodes to sort.
+ * @returns {Episode[]} Sorted array of episodes.
+ */
 export const sortEpisodesByTitleZA = (episodes) => {
   return episodes.sort((a, b) => b.episodeTitle.localeCompare(a.episodeTitle));
 };
 
+/**
+ * Parses a date string into a Date object using date-fns parse function.
+ * @param {string} dateString - The date string to parse.
+ * @returns {Date | null} Parsed Date object or null if parsing fails.
+ */
 const parseDate = (dateString) => {
   if (!dateString) return null; // Handle empty string
   try {
@@ -254,6 +280,13 @@ const parseDate = (dateString) => {
   }
 };
 
+/**
+ * Compares two dates for sorting purposes.
+ * @param {Date | null} dateA - The first date to compare.
+ * @param {Date | null} dateB - The second date to compare.
+ * @param {boolean} ascending - Flag indicating ascending (true) or descending (false) order.
+ * @returns {number} Comparison result.
+ */
 const compareDates = (dateA, dateB, ascending = true) => {
   if (!dateA && !dateB) return 0;
   if (!dateA) return ascending ? -1 : 1;
@@ -261,6 +294,11 @@ const compareDates = (dateA, dateB, ascending = true) => {
   return ascending ? dateA - dateB : dateB - dateA;
 };
 
+/**
+ * Sorts episodes by date from oldest to newest based on the 'dateFavourited' field.
+ * @param {Episode[]} episodes - Array of episodes to sort.
+ * @returns {Episode[]} Sorted array of episodes.
+ */
 export const sortEpisodesByDateOldest = (episodes) => {
   console.log('Sorting by Date Oldest - Input Episodes:', episodes);
   const sorted = episodes.sort((a, b) => {
@@ -273,6 +311,11 @@ export const sortEpisodesByDateOldest = (episodes) => {
   return sorted;
 };
 
+/**
+ * Sorts episodes by date from newest to oldest based on the 'dateFavourited' field.
+ * @param {Episode[]} episodes - Array of episodes to sort.
+ * @returns {Episode[]} Sorted array of episodes.
+ */
 export const sortEpisodesByDateNewest = (episodes) => {
   console.log('Sorting by Date Newest - Input Episodes:', episodes);
   const sorted = episodes.sort((a, b) => {
@@ -285,6 +328,10 @@ export const sortEpisodesByDateNewest = (episodes) => {
   return sorted;
 };
 
+/**
+ * Retrieves the current date and time in a formatted string.
+ * @returns {string} Current date and time formatted as 'Month Day, Year HH:MM AM/PM'.
+ */
 export const getCurrentDateTime = () => {
   return new Date().toLocaleString('en-US', {
     month: 'long',
@@ -294,122 +341,5 @@ export const getCurrentDateTime = () => {
     minute: 'numeric',
     hour12: true
   });
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import { useState, useEffect } from 'react';
-
-interface Episode {
-    id: string;
-    title: string;
-    image: string;
-    episodeId: string;
-    episodeTitle: string;
-    showId: string;
-    showTitle: string;
-    showImage: string;
-    seasonImage: string;
-    file: string;
-    isFavourite: boolean;
-    description: string; // Added description field
-}
-
-export const useFetchAndSetFavouriteEpisodes = (): Episode[] => {
-  const [favouriteEpisodes, setFavouriteEpisodes] = useState<Episode[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://podcast-api.netlify.app');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-
-        const showdata: Episode[] = data.map((show: any) => ({
-          id: show.id,
-          title: show.title,
-          image: show.image,
-        }));
-
-        const favourites = JSON.parse(localStorage.getItem('Shows')) || [];
-        if (favourites.length === 0) {
-          localStorage.setItem('Shows', JSON.stringify(showdata));
-        }
-
-        await Promise.all(showdata.map((show: Episode) => fetchDetailedShowData(show.id)));
-      } catch (error) {
-        console.error('Failed to fetch show data:', error);
-      }
-    };
-
-    const fetchDetailedShowData = async (showId: string) => {
-      try {
-        const response = await fetch(`https://podcast-api.netlify.app/id/${showId}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        const favourites = JSON.parse(localStorage.getItem('Shows')) || [];
-        const show = favourites.find((fav: any) => fav.id === showId);
-
-        if (!show) {
-          console.error('Show not found in Shows');
-          return;
-        }
-
-        const episodesData = data.seasons.flatMap((season: any) =>
-          season.episodes.map((episode: any) => ({
-            showId: showId,
-            episodeId: `episode-${showId}-${season.season}-${episode.episode}`,
-            episodeTitle: episode.title,
-            showTitle: show.title,
-            showImage: show.image,
-            seasonImage: season.image,
-            file: episode.file,
-            isFavourite: false,
-            description: episode.description, 
-            dateFavourited:"",
-          }))
-        );
-
-        const storedEpisodes = JSON.parse(localStorage.getItem('episodes')) || [];
-        const updatedEpisodes = [...storedEpisodes, ...episodesData];
-
-        const uniqueEpisodes = Array.from(new Set(updatedEpisodes.map((e: Episode) => e.episodeId)))
-          .map((id: string) => updatedEpisodes.find((e: Episode) => e.episodeId === id));
-
-        // Update description in existing episodes (optional)
-        const episodesWithDescriptions = uniqueEpisodes.map((episode) => {
-          const storedEpisode = storedEpisodes.find((e) => e.episodeId === episode.episodeId);
-          return storedEpisode?.description ? episode : { ...episode, description: episode.description };
-        });
-
-        localStorage.setItem('episodes', JSON.stringify(episodesWithDescriptions)); // Store episodes with descriptions
-
-        const favouriteEpisodesFiltered = uniqueEpisodes.filter((episode: Episode) => episode.isFavourite);
-
-        setFavouriteEpisodes(favouriteEpisodesFiltered);
-      } catch (error) {
-        console.error('Failed to fetch detailed show data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  return favouriteEpisodes;
 };
 

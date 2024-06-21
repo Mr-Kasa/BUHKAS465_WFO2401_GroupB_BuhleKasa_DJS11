@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import "./ShowPreview.css";
 
+/**
+ * Interface for an Episode object.
+ */
 interface Episode {
   title: string;
   description: string;
@@ -9,6 +12,9 @@ interface Episode {
   file: string;
 }
 
+/**
+ * Interface for a Season object.
+ */
 interface Season {
   season: number;
   title: string;
@@ -16,6 +22,9 @@ interface Season {
   episodes: Episode[];
 }
 
+/**
+ * Interface for a Podcast object.
+ */
 interface Podcast {
   id: string;
   title: string;
@@ -23,6 +32,11 @@ interface Podcast {
   seasons: Season[];
 }
 
+/**
+ * ShowPreview component displaying details of a podcast show.
+ * 
+ * @returns {JSX.Element} The ShowPreview component.
+ */
 const ShowPreview: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [podcast, setPodcast] = useState<Podcast | null>(null);
@@ -71,6 +85,7 @@ const ShowPreview: React.FC = () => {
 };
 
 export default ShowPreview;
+
 
 
 

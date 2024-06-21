@@ -1,11 +1,19 @@
 body{
     align-items: center;
     margin: 0;
+    
 }
 .episodeLayout{
     padding-bottom: 13rem;
+    margin-left: 3rem;
 }
-
+.listItems{
+    padding:2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap:1rem;
+    
+}
 .favoutiteButton{
     background-color: transparent;
     border: 0;
@@ -24,17 +32,18 @@ body{
 }
 
 .light{ 
-    .EpisodesContainer{
-    background-color: rgb(218, 198, 170);}
-    .episodeTile{
-        background-color: rgb(231, 175, 70);}
+.listItem{
+        background-color: rgb(187, 125, 9);}
+        .EpisodesContainer{
+            background-color:rgb(221, 219, 96)}
 }
 
 .dark{ 
     .EpisodesContainer{
-    background-color:darkcyan}
-    .episodeTile{
-        background-color: rgb(14, 177, 150);}
+    background-color:rgb(14, 59, 59)}
+    .listItem{
+        background-color: darkcyan}
+ 
 }
 
 .listItem{
@@ -43,11 +52,55 @@ body{
     padding-bottom: 0;
     padding: 1rem;
     margin: 1rem;
+    max-width: 500px;
+    box-shadow: 10px 10px 25px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 10px 10px 25px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 25px 0px rgba(0, 0, 0, 0.75);
+    overflow: hidden;
+    aspect-ratio: 1/1.5;
+   
 }
 
 .playButton{
   max-width: 100px;
   justify-self: center;
   align-self: center;
-  margin-left: 2.9rem;
+  margin-left: 1.5rem;
+}
+@media(min-width:370px){
+    .playButton{
+        margin-left: 3rem;
+    }
+}
+@media(min-width:400px){
+    .playButton{
+        margin-left: 4.7rem;
+    }
+}
+
+@media(min-width:700px){
+    .listItems{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media(min-width:1000px){
+    .playButton{
+        margin-left: 4rem;
+    }
+    .listItems{
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+@media(min-width:1400px){
+    .playButton{
+        margin-left: 8rem;
+    }
+}
+@media(min-width:2000px){
+    .playButton{
+        margin-left: 12rem;
+    }
+    .listItems{
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
 }

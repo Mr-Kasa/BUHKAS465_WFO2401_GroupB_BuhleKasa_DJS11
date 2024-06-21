@@ -1,13 +1,10 @@
-/* index.css */
 
-/* Reset some basic elements */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
-  /* Set default font and background color */
   body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -15,7 +12,7 @@
   
 
   
-  /* Ensure the main content doesn't get overlapped by fixed elements */
+ 
   main {
     padding-bottom: 60px; 
   }

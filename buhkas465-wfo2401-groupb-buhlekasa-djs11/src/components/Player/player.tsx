@@ -2,6 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Player.css';
 import { storePlayedEpisode } from '../../UtilFunctions';
 
+/**
+ * Interface for Episode object.
+ * @interface
+ */
 interface Episode {
   id: string;
   title: string;
@@ -10,6 +14,10 @@ interface Episode {
   file: string;
 }
 
+/**
+ * Interface for Player component props.
+ * @interface
+ */
 interface PlayerProps {
   episode: Episode | null;
   showId: string;
@@ -18,11 +26,13 @@ interface PlayerProps {
   seasonNumber: number;
 }
 
-
-
+/**
+ * Player component to play podcast episodes with playback controls.
+ * 
+ * @param {PlayerProps} props - The properties of the Player component.
+ * @returns {JSX.Element} The Player component.
+ */
 const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, seasonNumber }) => {
-
-//  console.log(`episode number  = ${episode?.file}`,`Episode title = ${episode?.title}`)
 
   const audioRef = useRef<HTMLAudioElement>(new Audio());
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -80,7 +90,7 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
 
   useEffect(() => {
     if (episode) {
-     storePlayedEpisode( episode?.title , episode?.description)
+      storePlayedEpisode(episode.title, episode.description);
 
       const audio = audioRef.current;
       audio.src = episode.file;
@@ -104,6 +114,9 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
     audioRef.current.playbackRate = playbackRate;
   }, [playbackRate]);
 
+  /**
+   * Handles play/pause button click.
+   */
   const handlePlayPause = () => {
     const audio = audioRef.current;
     if (isPlaying) {
@@ -116,6 +129,11 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
     }
   };
 
+  /**
+   * Handles progress bar change.
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The change event of the progress bar.
+   */
   const handleProgressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const newTime = (parseFloat(event.target.value) / 100) * duration;
@@ -127,6 +145,11 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
     }
   };
 
+  /**
+   * Handles volume slider change.
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The change event of the volume slider.
+   */
   const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const newVolume = parseFloat(event.target.value) / 100;
@@ -137,6 +160,9 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
     }
   };
 
+  /**
+   * Increments the playback rate.
+   */
   const incrementPlaybackRate = () => {
     try {
       setPlaybackRate((prevRate) => Math.min(prevRate + 0.1, 2));
@@ -146,6 +172,9 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
     }
   };
 
+  /**
+   * Decrements the playback rate.
+   */
   const decrementPlaybackRate = () => {
     try {
       setPlaybackRate((prevRate) => Math.max(prevRate - 0.1, 0.5));
@@ -155,6 +184,9 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
     }
   };
 
+  /**
+   * Toggles the display of the settings menu.
+   */
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
@@ -162,7 +194,7 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
   return (
     <div className='footer-container'>
       <div className="audio-player">
-   <div className="controls">
+        <div className="controls">
           <button className="play-pause-btn" onClick={handlePlayPause} disabled={!episode}>
             {isPlaying ? '⏸️' : '▶️'}
           </button>
@@ -179,7 +211,7 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
           <span className="time-display">
             {Math.floor(currentTime / 60)}:{Math.floor(currentTime % 60).toString().padStart(2, '0')}
           </span>
-     </div>
+        </div>
         <button className="settings-btn" onClick={toggleSettings}>
           {showSettings ? '🔧' : '⚙️'}
         </button>

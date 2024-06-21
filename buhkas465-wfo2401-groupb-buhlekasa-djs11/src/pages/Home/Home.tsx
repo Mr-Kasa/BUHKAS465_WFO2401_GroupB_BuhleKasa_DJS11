@@ -14,16 +14,27 @@ interface Podcast {
   update: string;
 }
 
+/**
+ * Home component displaying a list of podcasts based on selected genre, sorting options,
+ * and search input.
+ * 
+ * @returns {JSX.Element} The Home component.
+ */
 const Home: React.FC = () => {
   const [allPodcasts, setAllPodcasts] = useState<Podcast[]>([]);
   const [displayedPodcasts, setDisplayedPodcasts] = useState<Podcast[]>([]);
-  const [isInitialLoading, setIsInitialLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
   const [titleSortOrder, setTitleSortOrder] = useState<'AZ' | 'ZA' | null>('AZ');
   const [dateSortOrder, setDateSortOrder] = useState<'Oldest' | 'Newest' | null>(null);
   const [searchInput, setSearchInput] = useState<string>('');
 
+  /**
+   * Function to load podcasts based on selected genre ID.
+   * 
+   * @param {number | null} genreId - The ID of the selected genre.
+   */
   const loadPodcasts = async (genreId: number | null = null) => {
     setIsInitialLoading(true);
     setError(null);
@@ -44,6 +55,11 @@ const Home: React.FC = () => {
     }
   };
 
+  /**
+   * Apply filters (genre, title sort, date sort) to the list of podcasts.
+   * 
+   * @param {Podcast[]} podcasts - The list of podcasts to filter.
+   */
   const applyAllFilters = (podcasts: Podcast[]) => {
     let filteredPodcasts = selectedGenre !== null
       ? podcasts.filter(podcast => podcast.genres.includes(selectedGenre))
@@ -71,23 +87,40 @@ const Home: React.FC = () => {
     applyAllFilters(allPodcasts);
   }, [selectedGenre, titleSortOrder, dateSortOrder]);
 
+  /**
+   * Event handler for selecting a genre from dropdown.
+   * 
+   * @param {React.ChangeEvent<HTMLSelectElement>} e - The event object.
+   */
   const handleGenreChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const genreId = e.target.value ? Number(e.target.value) : null;
     console.log('Selected genre ID:', genreId);
     setSelectedGenre(genreId);
   };
 
+  /**
+   * Toggle function for sorting podcasts by title.
+   */
   const handleTitleSortToggle = () => {
     setTitleSortOrder(prevOrder => (prevOrder === 'AZ' ? 'ZA' : 'AZ'));
     setDateSortOrder(null);
   };
 
+  /**
+   * Toggle function for sorting podcasts by date.
+   */
   const handleDateSortToggle = () => {
     setDateSortOrder(prevOrder => (prevOrder === 'Newest' ? 'Oldest' : 'Newest'));
     setTitleSortOrder(null);
   };
 
-  const getGenreNames = (genreIds: number[]) => {
+  /**
+   * Get genre names based on genre IDs.
+   * 
+   * @param {number[]} genreIds - Array of genre IDs.
+   * @returns {string} The formatted genre names.
+   */
+  const getGenreNames = (genreIds: number[]): string => {
     const genres = genreIds.map((id) => Genres[id]);
     if (genres.length === 1) {
       return `Genre: ${genres[0]}`;
@@ -98,6 +131,11 @@ const Home: React.FC = () => {
     }
   };
 
+  /**
+   * Event handler for search input change.
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The event object.
+   */
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value.toLowerCase();
     setSearchInput(inputValue);
@@ -109,11 +147,17 @@ const Home: React.FC = () => {
     setDisplayedPodcasts(filteredPodcasts);
   };
 
+  /**
+   * Event handler to clear search input and reset displayed podcasts to all.
+   */
   const handleClearSearch = () => {
     setSearchInput('');
     setDisplayedPodcasts(allPodcasts);
   };
 
+  /**
+   * Map podcasts to JSX elements for rendering.
+   */
   const podcastElements = displayedPodcasts.map((podcast: Podcast) => (
     <div key={podcast.id} className="podcast-tile">
       <Link to={`/show/${podcast.id}`}>
@@ -129,7 +173,7 @@ const Home: React.FC = () => {
     </div>
   ));
 
-  useFetchAndSetFavouriteEpisodes();
+  useFetchAndSetFavouriteEpisodes(); // Custom hook to fetch and set favourite episodes
 
   return (
     <div className="HomePagePodcasts">
@@ -186,8 +230,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
-
-
-
-

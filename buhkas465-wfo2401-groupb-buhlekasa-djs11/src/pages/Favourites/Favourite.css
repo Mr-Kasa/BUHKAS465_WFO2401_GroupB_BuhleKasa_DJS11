@@ -38,6 +38,7 @@
 .sortDate{
   background-color: cadetblue;
   border-radius: 15px;
+  padding: 2px 0px;
 }
 
 .sort-buttons button:hover {
@@ -99,10 +100,22 @@
   .sort-buttons{
 gap:5rem;
   }
+  .sortAZ{
+    padding: 4px;
+  }
+  .sortDate{
+    padding: 4px;
+  }
 }
 
 @media(min-width: 1400px){
   .sort-buttons{
-gap:15rem;
+    gap:15rem;
+  }
+  .sortAZ{
+    padding: 6px;
+  }
+  .sortDate{
+    padding: 6px;
   }
 }

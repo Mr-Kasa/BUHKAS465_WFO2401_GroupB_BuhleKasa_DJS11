@@ -1,28 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { getCurrentDateTime } from '../../UtilFunctions';
 import "./History.css";
+import { Episode } from "../../types";
 
-// Function to extract episode number from episodeId
-const getEpisodeNumber = (episodeId) => {
+/**
+ * Function to extract episode number from episodeId.
+ * 
+ * @param {string} episodeId - The ID of the episode.
+ * @returns {string} The episode number.
+ */
+const getEpisodeNumber = (episodeId: string): string => {
   const parts = episodeId.split('-');
   return parts[parts.length - 1];
 };
 
-// Function to extract season number from episodeId
-const getSeasonNumber = (episodeId) => {
+/**
+ * Function to extract season number from episodeId.
+ * 
+ * @param {string} episodeId - The ID of the episode.
+ * @returns {string} The season number.
+ */
+const getSeasonNumber = (episodeId: string): string => {
   const parts = episodeId.split('-');
   return parts[parts.length - 2];
 };
 
-export default function History() {
-  const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [noHistory, setNoHistory] = useState(false);
+/**
+ * Component to display and manage viewing history of episodes.
+ * 
+ * @returns {JSX.Element} The History component.
+ */
+const History: React.FC = () => {
+  const [history, setHistory] = useState<Episode[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [noHistory, setNoHistory] = useState<boolean>(false);
 
   useEffect(() => {
-    const storedHistory = JSON.parse(localStorage.getItem('history')) || [];
-    const storedEpisodes = JSON.parse(localStorage.getItem('episodes')) || [];
+    const storedHistory = JSON.parse(localStorage.getItem('history') || '[]') as Episode[];
+    const storedEpisodes = JSON.parse(localStorage.getItem('episodes') || '[]') as Episode[];
 
     const updatedHistory = storedHistory.map(episode => {
       const matchingEpisode = storedEpisodes.find(ep => ep.episodeId === episode.episodeId);
@@ -57,8 +72,8 @@ export default function History() {
     setNoHistory(true);
   };
 
-  const toggleFavourite = (episode) => {
-    const storedEpisodes = JSON.parse(localStorage.getItem('episodes')) || [];
+  const toggleFavourite = (episode: Episode) => {
+    const storedEpisodes = JSON.parse(localStorage.getItem('episodes') || '[]') as Episode[];
 
     const updatedEpisodes = storedEpisodes.map((ep) => {
       if (ep.episodeId === episode.episodeId) {
@@ -121,7 +136,9 @@ export default function History() {
       </div>
     </div>
   );
-}
+};
+
+export default History;
 
 
 
