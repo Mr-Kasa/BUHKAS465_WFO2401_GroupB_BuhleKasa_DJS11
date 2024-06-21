@@ -117,7 +117,7 @@ const Home: React.FC = () => {
   const podcastElements = displayedPodcasts.map((podcast: Podcast) => (
     <div key={podcast.id} className="podcast-tile">
       <Link to={`/show/${podcast.id}`}>
-        <img src={podcast.imageUrl} alt={podcast.title} />
+        <img className='homeImg' src={podcast.imageUrl} alt={podcast.title} />
         <div className="podcast-info">
           <h3>{podcast.title}</h3>
           <p>Seasons: {podcast.seasons}</p>

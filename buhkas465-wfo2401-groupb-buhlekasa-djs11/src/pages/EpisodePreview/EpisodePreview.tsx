@@ -94,8 +94,8 @@ const EpisodePreview: React.FC = () => {
                 <li className='listItem'>
                   <h3>{storedEpisode.episodeTitle}</h3>
                   <p>{storedEpisode.description}</p>
-                  <div className="custom-button" onClick={() => handleEpisodeClick(storedEpisode)}>
-                    <h2>Play</h2>
+                  <div className="custom-button playButton" onClick={() => handleEpisodeClick(storedEpisode)}>
+                    <h2>▶️</h2>
                   </div>
                   <div className='custom-button favouriteButton' onClick={() => toggleFavourite(storedEpisode)}>
                     <h2>{storedEpisode.isFavourite ? '❤️' : '♡'}</h2>

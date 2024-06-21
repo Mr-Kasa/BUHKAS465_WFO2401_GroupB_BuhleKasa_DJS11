@@ -10,14 +10,7 @@ body{
     background-color: transparent;
     border: 0;
 }
-.episodeTile{
-        padding: 1rem;
-        margin: 1em;
-        border-radius: 15px;
-        aspect-ratio: 1 / 1;
-        padding: 1rem;
-        margin: 1em;
-}
+
 .EpisodesContainer{
     display: flex;
     flex-direction: column;
@@ -47,4 +40,14 @@ body{
 .listItem{
     text-decoration: none;
     list-style-type: none;
+    padding-bottom: 0;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.playButton{
+  max-width: 100px;
+  justify-self: center;
+  align-self: center;
+  margin-left: 2.9rem;
 }
