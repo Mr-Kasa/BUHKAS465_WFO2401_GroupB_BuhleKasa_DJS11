@@ -1,7 +1,7 @@
 :root {
     --light-color: #292728; 
     --dark-color: #d6d2d4; 
-    --backgroundLightColor: #e3f593;
+    --backgroundLightColor: #f1952a;
     --backgroundDarkColor:#304059;
 
 }
@@ -36,7 +36,7 @@ a {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    width: 100%; /* Ensures header spans the full width of its container */
+    width: 100%; 
     padding: 1rem;
   }
   
@@ -60,19 +60,19 @@ a {
   
   @media (min-width: 710px) {
     .Header {
-      flex-direction: row; /* Align items horizontally on larger screens */
+      flex-direction: row; 
       font-size: x-large;
-      padding: 0; /* Remove padding to span the full width */
+      padding: 0; 
     }
     
     button {
-      min-width: 150%; /* Adjust button width as needed */
+      min-width: 150%; 
     }
   }
   
   @media (min-width: 1000px) {
     .Header {
-      font-size: xx-large; /* Further increase font size for larger screens */
+      font-size: xx-large; 
     }
   }
   

@@ -162,10 +162,11 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
   return (
     <div className='footer-container'>
       <div className="audio-player">
-        <div className="controls">
+   <div className="controls">
           <button className="play-pause-btn" onClick={handlePlayPause} disabled={!episode}>
             {isPlaying ? '⏸️' : '▶️'}
           </button>
+          
           <input
             className="progress-bar"
             type="range"
@@ -178,7 +179,7 @@ const Player: React.FC<PlayerProps> = ({ episode, showId, showTitle, seasonImg, 
           <span className="time-display">
             {Math.floor(currentTime / 60)}:{Math.floor(currentTime % 60).toString().padStart(2, '0')}
           </span>
-        </div>
+     </div>
         <button className="settings-btn" onClick={toggleSettings}>
           {showSettings ? '🔧' : '⚙️'}
         </button>
